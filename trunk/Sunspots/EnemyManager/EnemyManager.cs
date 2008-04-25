@@ -16,6 +16,8 @@ namespace StarForce_PendingTitle_
         TimeSpan timetillnextupdate = new TimeSpan(0, 0, 0, 0, 200);
         TimeSpan elapsedTime = new TimeSpan(0, 0, 0, 0, 200);
 
+        public List<Enemy> TriggerDeployList;
+
         public static Int16 EnemyId = -32768;
         //if you are creating more than 32768*2 enemies in one level, you have problems, please dont talk to me
 
@@ -28,7 +30,7 @@ namespace StarForce_PendingTitle_
 
         public EnemyManager()
         {
-            
+            TriggerDeployList = new List<Enemy>();
             EnemyList = new Dictionary<short, Enemy>();
             OnlineEnemiesHit = new Dictionary<short, Enemy>();
             MessagesRecieved = new Queue<NetMessage>();
@@ -40,6 +42,12 @@ namespace StarForce_PendingTitle_
             EnemyList.Add(EnemyId, newenemy);
             EnemyId++;
             EnemyCount++;
+        }
+
+        public void AddTriggerEnemy(Enemy newenemy)
+        {
+            TriggerDeployList.Add(newenemy);
+            EnemyId++;
         }
 
         public Dictionary<short,Enemy> GetEnemyList() { return EnemyList; }
@@ -134,8 +142,24 @@ namespace StarForce_PendingTitle_
             
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, MainShip playership)
         {
+            CollisionData Coll = playership.getCollisionData();
+            List<Enemy> RemoveList = new List<Enemy>();
+            for (int i = 0; i < TriggerDeployList.Count; i++)
+            {
+                Enemy E = TriggerDeployList[i];
+                if (Coll.checkCollision(E.getTriggerOBB()))
+                {
+                    RemoveList.Add(E);
+                }
+            }
+            foreach (Enemy E in RemoveList)
+            {
+                TriggerDeployList.Remove(E);
+                EnemyList.Add(E.getKey(),E);
+            }
+                
             if (NetClientClass.Client != null && NetClientClass.Client.Status == NetConnectionStatus.Connected)
             {
                 HandleOnline(gameTime);

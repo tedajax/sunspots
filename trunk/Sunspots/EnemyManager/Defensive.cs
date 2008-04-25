@@ -9,14 +9,14 @@ namespace StarForce_PendingTitle_
 {
     class Defensive : Enemy
     {
-        public Defensive(Model enemymodel, Vector3 position, Vector3 rotation, short KeyVal)
+        public Defensive(Model enemymodel, Vector3 position, Vector3 rotation, OBB Trigger, short KeyVal)
         {
             EnemyModel = enemymodel;
             Position = position;
             Rotation = rotation;
             this.Key = KeyVal;
-            this.scoreValue = 10f;  
-
+            this.scoreValue = 10f;
+            this.TriggerOBB = Trigger;
             TargetPosition = Vector3.Zero;
 
             EnemyObj = new Obj3d(EnemyModel, Position, Rotation);

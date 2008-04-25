@@ -12,9 +12,6 @@ namespace StarForce_PendingTitle_
     [XmlRoot(Namespace = null, IsNullable = true, ElementName = "LevelData")]
     public class LevelData
     {
-
-
-
         /// <summary>
         /// An Abstract 3D Object class. Used to save 3D object Data. Expand upon if need be.
         /// </summary>
@@ -31,6 +28,32 @@ namespace StarForce_PendingTitle_
             public Generic3DObject()
             {
 
+            }
+        }
+
+        public class EnemyData : Generic3DObject
+        {
+            [XmlAttribute]
+            public String EnemyType;
+
+            public TriggerData Trigger;
+            public EnemyData()
+            {
+                EnemyType = "Chase";
+                Trigger = new TriggerData();
+            }
+        }
+
+        public class TriggerData
+        {
+
+            public Vector3 Position;
+            public Vector3 Scale;
+
+            public TriggerData()
+            {
+                Position = new Vector3();
+                Scale = Vector3.One;
             }
         }
 
@@ -74,7 +97,7 @@ namespace StarForce_PendingTitle_
         /// Level Objects. These are giant Meshes placed in the level. Require Collision
         /// </summary>
         public List<Generic3DObject> LevelObjects;
-
+        public List<EnemyData> LevelEnemies;
 
         ///<summary>
         /// Static Objects dont require collision. Things like Trees will go here.
@@ -91,6 +114,8 @@ namespace StarForce_PendingTitle_
             LevelObjects = new List<Generic3DObject>();
             // StaticObjects = new List<Generic3DObject>();new
             Waypoints = new WaypointFolder();
+
+            LevelEnemies = new List<EnemyData>();
         }
 
         /// <summary>
@@ -99,7 +124,6 @@ namespace StarForce_PendingTitle_
         /// <param name="Filename">the filename to save into</param>
         public void Save(string Filename)
         {
-
             Stream stream = null;
             try
             {
@@ -112,7 +136,6 @@ namespace StarForce_PendingTitle_
                 if (stream != null)
                     stream.Close();
             }
-
         }
 
         /// <summary>
@@ -143,8 +166,5 @@ namespace StarForce_PendingTitle_
 
             return LevelData;
         }
-
-
-
     }
 }

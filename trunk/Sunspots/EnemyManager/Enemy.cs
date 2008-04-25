@@ -84,7 +84,10 @@ namespace StarForce_PendingTitle_
 
         public float GetHealth() { return Health; }
 
-        #region Accessors
+        protected OBB TriggerOBB = new OBB(Vector3.Zero, Vector3.One);
+
+        #region Accessors\
+        public OBB getTriggerOBB() { return TriggerOBB; }
         public Vector3 GetPosition() { return Position; }
         public Vector3 GetRotation() { return Rotation; }
         public Model GetEnemyModel() { return EnemyModel; }
@@ -195,6 +198,7 @@ namespace StarForce_PendingTitle_
         #endregion
         #endregion
         #region Mutators
+        public void setTriggerObb(OBB obb) { this.TriggerOBB = obb; }
         public void SetPosition(Vector3 pos) { Position = pos; }
         public void SetRotation(Vector3 rot) { Rotation = rot; }
         public void SetEnemyModel(Model mod) { EnemyModel = mod; }
