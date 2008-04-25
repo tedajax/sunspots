@@ -35,6 +35,22 @@ namespace StarForce_PendingTitle_
 
         public void foundCollision(int where) { this.CollisionFound[where] = true; foundoverallcollision = true; }
 
+        public bool checkCollision(OBB Object)
+        {
+            bool overall = false;
+            for (int i = 0; i < this.CollisionBoxes.Length; i++)
+            {
+                OBB O = CollisionBoxes[i];
+                if (O.Intersects(Object))
+                {
+                    foundCollision(i);
+                    overall = true;
+                    foundoverallcollision = true;
+                }
+            }
+            return overall;
+        }
+
         public bool checkCollision(CollisionData Object)
         {
             bool overall = false;

@@ -217,9 +217,11 @@ namespace StarForce_PendingTitle_
             EnemiesKilled = Content.Load<Texture2D>("Content\\Hud\\enemieskilled");
             EnemyManagement = new EnemyManager();
             Vector3[] EnemyPositions = { new Vector3(5400, 200, -6000), new Vector3(7100, 500, -7100), new Vector3(5400, 500, -6500), new Vector3(5100, 500, -6100), new Vector3(4600, 800, -7000), new Vector3(7000, 300, -6300), new Vector3(6100, 400, -6000), StartingPosition + new Vector3(300, 0, -1000), StartingPosition + new Vector3(-300, 100, -500), StartingPosition + new Vector3(300, 100, -500), StartingPosition + new Vector3(100, 100, -600) };
-            for (int x = 0; x < EnemyPositions.Length; x++)
+            foreach (LevelData.EnemyData e in LevelData.LevelEnemies)
             {
-                EnemyManagement.AddEnemy(new Defensive(EnemyModel, EnemyPositions[x], Vector3.Zero, EnemyManager.EnemyId));
+                //EnemyManagement.AddEnemy(new Defensive(EnemyModel, e.Position * 20, e.Rotation, EnemyManager.EnemyId));
+                EnemyManagement.AddTriggerEnemy(new Defensive(EnemyModel, e.Position * 20, e.Rotation, new OBB(e.Position*20f+e.Trigger.Position*20f,e.Trigger.Scale*20f), EnemyManager.EnemyId));
+                //EnemyManagement.AddEnemy(new Defensive(, EnemyPositions[x], Vector3.Zero, EnemyManager.EnemyId));
                 //EnemyManagement.GetEnemyList()[x].ENEMY_SPEED = (float)Randomizer.NextDouble() * 10f;
             }
             LaserManagement = new LaserManager();
@@ -307,12 +309,12 @@ namespace StarForce_PendingTitle_
             //CollisionManager.UpdateCollision();
             ObjColMngr.CheckObjectCollisions();
             ParticleSystem.Update(gameTime);
-            EnemyManagement.Update(gameTime);
+            EnemyManagement.Update(gameTime, Controllers[0].MainShip);
             LaserManagement.Update(gameTime);
 
             if (EnemyManagement.GetEnemyCount() == 0)
             {
-                MissionComplete = true;
+             //   MissionComplete = true;
             }
             if (MissionComplete == true)
             {
