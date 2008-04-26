@@ -64,7 +64,7 @@ namespace StarForce_PendingTitle_
         }
 
         static Effect m_effect;
-        public const int particlesize = 80;
+        public const int particlesize = 30;
         public static int size = 80;
 
         Texture2D Sprite1;
@@ -320,7 +320,7 @@ namespace StarForce_PendingTitle_
                 pass.End();
             }
             m_effect.End();
-            graphics.RenderState.PointSize = (float)particlesize;
+            graphics.RenderState.PointSize = (float)50;
             m_effect.Parameters["WorldViewProj"].SetValue(Matrix.Identity* ViewMatrix * CameraClass.getPerspective());
             m_effect.Parameters["SpriteTexture"].SetValue(ReticuleUseTexture);
             m_effect.Begin();
