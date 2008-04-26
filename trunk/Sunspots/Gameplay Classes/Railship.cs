@@ -228,25 +228,23 @@ namespace StarForce_PendingTitle_
             if (amount < 0 && offsetPosition.X > XMaxDistFromCenter) canmove = false;
             if (amount > 0 && offsetPosition.X < -XMaxDistFromCenter) canmove = false;
             float RotationToReach = MathHelper.ToRadians(30) * amount;
-            if (amount != 0)
-            {
-                //this.drawrotation.Y = MathHelper.Lerp(drawrotation.Y, RotationToReach, .06f);
-               // this.drawrotation.Y = RailShip.MoveTo(drawrotation.Y, RotationToReach, .04f);
-                //ismovingYAxis = true;
-            }
             ismovingYAxis = true;
             
             if (canmove)
             {
-                //amount *= elapsedtimemultiplier;
-                //
+                
                 offsetPosition += new Vector3(-1.3f, 0, 0) * amount * elapsedtimemultiplier;
                 float distanceToMax = offsetPosition.X / XMaxDistFromCenter * -1;
                 RotationToReach = MathHelper.ToRadians(30 * distanceToMax);
                 this.drawrotation.Y = RotationToReach;
-
-                /*RotationToReach = MathHelper.ToRadians(45) * amount;
-                this.drawrotation.Z = MathHelper.Lerp(drawrotation.Z, RotationToReach, .3f);*/
+                if (amount != 0)
+                {
+                    float TempRotation = drawrotation.Z;
+                    float sign = amount / Math.Abs(amount);
+                    TempRotation += (MathHelper.ToRadians(8*sign) );
+                    TempRotation = MathHelper.Clamp(TempRotation, MathHelper.ToRadians(-50), MathHelper.ToRadians(50));
+                    drawrotation.Z = TempRotation;
+                }
             }
             
         }
@@ -255,17 +253,13 @@ namespace StarForce_PendingTitle_
         {
             bool canmove = true;
             //ismovingYAxis = true;
-            if (amount > 0 && offsetPosition.Y > 50) canmove = false;
-            if (amount < 0 && offsetPosition.Y < -20) canmove = false;
+            if (amount < 0 && offsetPosition.Y > 50) canmove = false;
+            if (amount > 0 && offsetPosition.Y < -20) canmove = false;
             float RotationToReach = MathHelper.ToRadians(15) * amount;
-            /*if (amount != 0)
-            {
-                this.drawrotation.X = RailShip.MoveTo(drawrotation.X, RotationToReach, .05f);
-                ismovingXAxix = true;
-            }*/
+            
             if (canmove)
             {
-                offsetPosition += new Vector3(0, 1, 0) * amount * elapsedtimemultiplier;
+                offsetPosition += new Vector3(0, -1, 0) * amount * elapsedtimemultiplier;
                 float distanceToMax = offsetPosition.Y / YMaxDistFromCenter;
                 RotationToReach = MathHelper.ToRadians(15) * distanceToMax;
                 drawrotation.X = RotationToReach;
@@ -300,29 +294,17 @@ namespace StarForce_PendingTitle_
             elapsedtimemultiplier = gameTime.ElapsedGameTime.Milliseconds / (1000 / Game1.FPS);
 
 
-            if (LerpTehMatricies)
-            {
-                LerpTimeSpan -= gameTime.ElapsedGameTime;
-                if (LerpTimeSpan.TotalSeconds <= 0)
-                {
-                    LerpTehMatricies = false;
-                    TargetPosition = Waypoints.Dequeue();
-                }
-            }
-            else
-            {
+            
 
-                if (Vector3.Distance(ShipCenterPosition, TargetPosition) < 10)
-                {
-                   // LerpTehMatricies = true;
-                   // LerpTimeSpan = new TimeSpan(0, 0, 0,0,100);
-                    //TargettingMatrix =this.CreateLockOn(Waypoints.Peek(), this.shipCenterPosition);
-                    TargetPosition = Waypoints.Dequeue();
+            if (Vector3.Distance(ShipCenterPosition, TargetPosition) < 10)
+            {
                
-                }
-                TargettingMatrix = Matrix.Lerp(TargettingMatrix, this.CreateLockOn(TargetPosition, this.shipCenterPosition), 0.1f);
-                
+                TargetPosition = Waypoints.Dequeue();
+           
             }
+            TargettingMatrix = Matrix.Lerp(TargettingMatrix, this.CreateLockOn(TargetPosition, this.shipCenterPosition), 0.1f);
+            
+        
 
            
 
@@ -335,26 +317,29 @@ namespace StarForce_PendingTitle_
             //make the players rotation equal to the new calculation
             this.newrotation = additionalrotation;
 
-            this.drawrotation.Z = MathHelper.Lerp(drawrotation.Z, 0, .3f);
+            
             if (!ismovingYAxis)
             {
                 drawrotation.Y = RailShip.MoveTo(drawrotation.Y, 0f, 0.05f);
             }
-            /*if (!ismovingXAxix)
+            drawrotation.Z = MathHelper.Lerp(drawrotation.Z, 0, .1f);
+            if (drawrotation.Z != 0)
             {
-                drawrotation.X = RailShip.MoveTo(drawrotation.X, 0f, 0.05f);
+                float temprotation = drawrotation.Z;
+                float sign = drawrotation.Z / Math.Abs(drawrotation.Z);
+                temprotation = Math.Abs(temprotation);
+                temprotation -= MathHelper.ToRadians(1);
+                temprotation = MathHelper.Clamp(temprotation, 0, temprotation + MathHelper.ToRadians(1));
+                drawrotation.Z = temprotation * sign;
+
             }
-            ismovingXAxix = false;*/
+          
 
             ismovingYAxis = false;
-            // if (!ismovingXAxix && !axislocked) this.drawrotation.X = MathHelper.Lerp(drawrotation.X, 0, .01f);
-            //if (!ismovingYAxis && !axislocked) this.drawrotation.Y = MathHelper.Lerp(drawrotation.Y, 0, .01f);
-           
+          
 
             advance();
-            //this.combinedPosition = new Vector3(this.shipCenterPosition.X + ((float)Math.Cos(MathHelper.ToRadians(rotation.Y+90)) * offsetPosition.X), this.shipCenterPosition.Y + this.offsetPosition.Y, this.shipCenterPosition.Z + ((float)Math.Sin(MathHelper.ToRadians(this.rotation.Y+90)) * this.offsetPosition.X));
-            //this.combinedRotation = new Vector3(this.cameraRotation.X + this.rotation.X, this.cameraRotation.Y + this.rotation.Y, this.cameraRotation.Z + this.rotation.Z);
-
+          
             combinedPosition = offsetPosition;
             combinedPosition = Vector3.Transform(combinedPosition, TargettingMatrix);
             this.position = combinedPosition + shipCenterPosition;
@@ -422,7 +407,11 @@ namespace StarForce_PendingTitle_
 
         }
 
-       
+        public override void Draw2D(SpriteBatch batch, SpriteFont font)
+        {
+            base.Draw2D(batch, font);
+            batch.DrawString(font, offsetPosition.ToString(), Vector2.Zero, Color.Wheat);
+        }
      
 
     

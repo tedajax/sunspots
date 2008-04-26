@@ -1,0 +1,25 @@
+Sunspots Check List
+
+
+ 	- Level Select
+		- Not Crash When loaded a second time
+		- Fixed Camera Position
+		- Transition
+			- Stop displaying everything but ship and planet
+			- Zoom into carrier ship
+			- Allow player to select his ship
+			- Launch ship at planet
+			- Fade out screen
+	- Level 1
+		- Fix waypoints to be more smooth
+		- Add enemies
+			- Types of Enemies
+				- Fly up enemy (suprise enemy) 
+				  - Enemy flies up at player shoots a few times and flies away
+				- Patrol Enemy
+				  - When Trigger is hit, Enemy flies from its position to infront of the players position. Flies side to side. Shoots
+				- Patrol Enemy 2
+			 	  - Enemy is active before trigger is hit. When Trigger is hit, enemy flies with the player, staying infront of him.
+		- Add Motion Blur
+		- Add Transition into All Range Mode
+	
