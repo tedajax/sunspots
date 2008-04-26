@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Lidgren.Library.Network;
 using Lidgren.Library.Network.Xna;
+using Ziggyware.Xna;
 
 namespace StarForce_PendingTitle_
 {
@@ -149,10 +150,16 @@ namespace StarForce_PendingTitle_
             for (int i = 0; i < TriggerDeployList.Count; i++)
             {
                 Enemy E = TriggerDeployList[i];
-                if (Coll.checkCollision(E.getTriggerOBB()))
+                /*if (Coll.checkCollision(E.getTriggerOBB()))
+                {
+                    RemoveList.Add(E);
+                }*/
+                OBB newObb = new OBB(playership.getSecondaryPosition(), new Vector3(10, 10, 10));
+                if (newObb.Intersects(E.getTriggerOBB()))
                 {
                     RemoveList.Add(E);
                 }
+                
             }
             foreach (Enemy E in RemoveList)
             {

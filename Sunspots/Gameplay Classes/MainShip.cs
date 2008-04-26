@@ -181,6 +181,11 @@ namespace StarForce_PendingTitle_
             internal set { this.position = value; }
         }
 
+        public virtual Vector3 getSecondaryPosition()
+        {
+            return this.Position;
+        }
+
         #endregion
         /// <summary>
         /// this function needs to be called by any class that extends this one

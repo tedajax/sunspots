@@ -412,8 +412,12 @@ namespace StarForce_PendingTitle_
             base.Draw2D(batch, font);
             batch.DrawString(font, offsetPosition.ToString(), Vector2.Zero, Color.Wheat);
         }
-     
 
+
+        public override Vector3 getSecondaryPosition()
+        {
+            return this.shipCenterPosition;
+        }
     
       /*  public override void SetWaypointVars(Waypoint GotoPoint)
         {
