@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Build\Bin\</OutputPath>
+    <OutputPath>bin\x86\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -109,6 +109,7 @@
     <Compile Include="Misc Classes\TextboxManager.cs" />
     <Compile Include="Missile\Missile.cs" />
     <Compile Include="NetClientClass.cs" />
+    <Compile Include="Particle System\PointSpriteParticles.cs" />
     <Compile Include="ParticleEmitter.cs" />
     <Compile Include="ParticleSettings.cs" />
     <Compile Include="ParticleSystem.cs" />

@@ -478,12 +478,14 @@ namespace StarForce_PendingTitle_
                 //If the timer is down
                 if (RandomAssTimer.TotalMilliseconds <= 0)
                 {
+                    /*
                     //if it already has been played resume the sound
                     if (SoundFX.LoopingSoundExist("Engine"))
                         SoundFX.ResumeSound("Engine");
                     else
                         //begin looping the sound
                         SoundFX.LoopSound("Engine");
+                     */
                 }
                 else
                 {

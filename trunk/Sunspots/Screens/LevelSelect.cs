@@ -50,6 +50,8 @@ namespace StarForce_PendingTitle_
         bool LaunchShip = false;
         float TransitionAddedYRot = 0f;
 
+        PointSpriteParticles PSParts;
+
         Texture2D Black;
         float Opacity = 0f;
         
@@ -98,6 +100,16 @@ namespace StarForce_PendingTitle_
 
             Black = WindowManager.Content.Load<Texture2D>("Content\\Dark");
 
+            PSParts = new PointSpriteParticles(WindowManager.Game,
+                                               Game1.Graphics,
+                                               "Content\\Particle",
+                                               "Content\\Effects\\Particle",
+                                               100
+                                               );
+            PSParts.Initialize();
+            PSParts.myScale = Vector3.One * (1.0f / 5.0f);
+            PSParts.RandomColor = false;
+            PSParts.particleColor = Color.Red;
         }
 
         public override void Update(GameTime gameTime)
@@ -308,6 +320,7 @@ namespace StarForce_PendingTitle_
             if (WindowManager.Controls.getShoot() > 0 && !SelectPressed)
             {
                 Mode = "Transition";
+                //Mode = "Die";
                 SelectPressed = true;
             }
 
@@ -329,6 +342,8 @@ namespace StarForce_PendingTitle_
             OldMouseX = Mouse.GetState().X;
             OldMouseY = Mouse.GetState().Y;
             OldScrollWheel = Mouse.GetState().ScrollWheelValue;
+
+            PSParts.Update(gameTime);
         }
 
         private void LevelSelectRun(GameTime gameTime)
@@ -338,6 +353,8 @@ namespace StarForce_PendingTitle_
         private void Die()
         {
             WindowManager.Game.Components.Remove(Bloom);
+            WindowManager.removeScreen(this);
+            WindowManager.AddScreen(new Playing(), 0);
         }
 
         public override void Draw(GameTime gameTime)
@@ -379,10 +396,12 @@ namespace StarForce_PendingTitle_
                 }
                 Mothership.DisplayModel(CameraClass.getLookAt(), "Toon", Vector3.Zero);
                 Particles.Draw2(gameTime, WindowManager.GraphicsDevice);
-
+                
                 device.SetRenderTarget(0, null);
                 device.Clear(Color.Black);
                 ApplyPostprocess();
+
+                PSParts.Draw(gameTime);
                 Bloom.calleddrawalready = false;
                 Bloom.Draw(gameTime);
 

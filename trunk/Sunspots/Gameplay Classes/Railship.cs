@@ -331,7 +331,6 @@ namespace StarForce_PendingTitle_
                 temprotation -= MathHelper.ToRadians(1);
                 temprotation = MathHelper.Clamp(temprotation, 0, temprotation + MathHelper.ToRadians(1));
                 drawrotation.Z = temprotation * sign;
-
             }
           
 
