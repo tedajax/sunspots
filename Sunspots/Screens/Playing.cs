@@ -314,10 +314,10 @@ namespace StarForce_PendingTitle_
         private void PointSpriteUpdate(GameTime gameTime)
         {
             Vector3 pos = Controllers[0].MainShip.Position;
-            Matrix rot = Matrix.CreateFromQuaternion(Controllers[0].MainShip.NewRotation);
+            Matrix rot = Controllers[0].MainShip.getNonMovementPositionRotationMatrix();//Matrix.CreateFromQuaternion(Controllers[0].MainShip.NewRotation);
             Vector3 pspos = Vector3.Transform(Vector3.Forward * 20, rot);
-            PointSpriteParticles.myPosition = pspos + pos;//Controllers[0].MainShip.Position;
-            PointSpriteParticles.myRotation = Controllers[0].MainShip.NewRotation;
+            PointSpriteParticles.myPosition = pspos;//Controllers[0].MainShip.Position;
+            PointSpriteParticles.myRotation = Quaternion.CreateFromRotationMatrix(rot);//Controllers[0].MainShip.NewRotation;
             PointSpriteParticles.Update(gameTime);
         }
      

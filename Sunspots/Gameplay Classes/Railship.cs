@@ -293,21 +293,11 @@ namespace StarForce_PendingTitle_
             ingameadvancespeed = MathHelper.Lerp(ingameadvancespeed, advanceSpeed, .3f);
             elapsedtimemultiplier = gameTime.ElapsedGameTime.Milliseconds / (1000 / Game1.FPS);
 
-
-            
-
             if (Vector3.Distance(ShipCenterPosition, TargetPosition) < 10)
             {
-               
                 TargetPosition = Waypoints.Dequeue();
-           
             }
             TargettingMatrix = Matrix.Lerp(TargettingMatrix, this.CreateLockOn(TargetPosition, this.shipCenterPosition), 0.1f);
-            
-        
-
-           
-
 
             //Caculate how the player is going to rotate (based on his movement)
             Quaternion additionalrotation = Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), RotationValues.Y)
