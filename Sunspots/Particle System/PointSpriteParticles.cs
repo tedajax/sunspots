@@ -10,7 +10,8 @@ namespace StarForce_PendingTitle_
     public enum ParticleSystemType
     {
         Ball,
-        Explosion
+        Explosion,
+        Stream
     }
     public class PointSpriteParticles
     {
@@ -19,12 +20,15 @@ namespace StarForce_PendingTitle_
             public Vector3 Position;
             public Color Color;
             public Vector4 Data;
-            
+
+            public Vector3 Velocity;
+
             public VertexParticle(Vector3 position, Color color)
             {
                 Position = position;
                 Color = color;
-                Data = Vector4.Zero;                
+                Data = Vector4.Zero;
+                Velocity = Vector3.Zero;
             }
             public static readonly VertexElement[] VertexElements = new VertexElement[] {
                 new VertexElement(0, 0, VertexElementFormat.Vector3, VertexElementMethod.Default, VertexElementUsage.Position, 0),
@@ -54,7 +58,7 @@ namespace StarForce_PendingTitle_
             }
             public override int GetHashCode()
             {
-                return Position.GetHashCode() | Color.GetHashCode() | Data.GetHashCode();
+                return Position.GetHashCode() | Color.GetHashCode() | Data.GetHashCode() | Velocity.GetHashCode();
             }
             public override string ToString()
             {
@@ -197,8 +201,54 @@ namespace StarForce_PendingTitle_
                 case ParticleSystemType.Explosion:
                     Explosion();
                     break;
+                case ParticleSystemType.Stream:
+                    Stream();
+                    break;
             }
         }
+
+        public virtual void Stream()
+        {
+            float lerpspeed = 0.1f;
+            float backdistance = 200f;
+
+            for (int i = 0; i < m_sprites.Length; i++)
+            {
+                if (m_sprites[i].Velocity == Vector3.Zero)
+                {
+                    if (m_rand.NextDouble() < .2)
+                    {
+                                                
+                        while (m_sprites[i].Velocity.X > -15 && m_sprites[i].Velocity.X < 15
+                               && m_sprites[i].Velocity.Y > -15 && m_sprites[i].Velocity.Y < 15)
+                        {
+                            m_sprites[i].Velocity.X = m_rand.Next(-30, 30);
+                            m_sprites[i].Velocity.Y = m_rand.Next(-30, 30);
+                        }
+
+                        m_sprites[i].Velocity.Z = backdistance;
+
+                        m_sprites[i].Data = new Vector4(0.1f, 0, 0, 0);
+                    }
+                }
+                
+                if (m_sprites[i].Data.X > 0)
+                    m_sprites[i].Data.X += 0.5f;
+
+                m_sprites[i].Position.X = MathHelper.Lerp(m_sprites[i].Position.X, m_sprites[i].Velocity.X, lerpspeed);
+                m_sprites[i].Position.Y = MathHelper.Lerp(m_sprites[i].Position.Y, m_sprites[i].Velocity.Y, lerpspeed);
+                m_sprites[i].Position.Z += m_sprites[i].Data.X;
+                
+                
+                if (m_sprites[i].Position.Z >= m_sprites[i].Velocity.Z)
+                {
+                    m_sprites[i].Position = Vector3.Zero;
+                    m_sprites[i].Velocity = Vector3.Zero;
+                    m_sprites[i].Data = Vector4.Zero;
+                }
+            }
+        }
+
         public virtual void Ball()
         {
             float radius = 2;
