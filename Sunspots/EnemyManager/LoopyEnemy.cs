@@ -58,9 +58,9 @@ namespace StarForce_PendingTitle_
             RollSpeed = MathHelper.Pi / 25;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void  Update(GameTime gameTime, MainShip PlayerShip)
         {
-            base.Update(gameTime);
+            base.Update(gameTime,PlayerShip);
 
             base.UpdateLocations(gameTime);
         }

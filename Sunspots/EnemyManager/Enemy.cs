@@ -269,7 +269,7 @@ namespace StarForce_PendingTitle_
             return AdvanceVector * EnemySpeed * elapsedgamemultiplier;
         }
 
-        public virtual void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime, MainShip PlayerShip)
         {
             /*
              * Collision detection for player fire will go here
@@ -279,7 +279,7 @@ namespace StarForce_PendingTitle_
              */
             elapsedgamemultiplier = gameTime.ElapsedGameTime.Milliseconds / (1000 / Game1.FPS);
 
-            advance = AdvanceForward(gameTime);
+            //advance = AdvanceForward(gameTime);
 
             
                         

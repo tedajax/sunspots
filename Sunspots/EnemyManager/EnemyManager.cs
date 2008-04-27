@@ -154,7 +154,7 @@ namespace StarForce_PendingTitle_
                 {
                     RemoveList.Add(E);
                 }*/
-                OBB newObb = new OBB(playership.getSecondaryPosition(), new Vector3(10, 10, 10));
+                OBB newObb = new OBB(playership.getSecondaryPosition(), new Vector3(10, 10, 10)*10f);
                 if (newObb.Intersects(E.getTriggerOBB()))
                 {
                     RemoveList.Add(E);
@@ -174,7 +174,7 @@ namespace StarForce_PendingTitle_
             CleanUpEnemies();
             foreach (Enemy e in EnemyList.Values)
             {
-                e.Update(gameTime);
+                e.Update(gameTime, playership);
             }
         }
 
