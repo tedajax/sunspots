@@ -9,10 +9,10 @@ namespace StarForce_PendingTitle_
 {
     class FlyUpEnemy : Enemy
     {
-        float OffsetDistance = 50f;
-        Vector3 ToTheLeftToTheLeft;
-        Vector3 ToTheRightToTheRight;
-        bool moveLeft = false;
+        //float OffsetDistance = 50f;
+        //Vector3 ToTheLeftToTheLeft;
+        //Vector3 ToTheRightToTheRight;
+        //bool moveLeft = false;
         Vector3 CenterPos;
         Matrix Lockon;
         public FlyUpEnemy(Model enemymodel, Vector3 position, Vector3 rotation, OBB Trigger, short KeyVal, Random Randomizer)
@@ -35,7 +35,7 @@ namespace StarForce_PendingTitle_
 
             if (Randomizer.Next(0, 1) == 0)
             {
-                moveLeft = true;
+                //moveLeft = true;
             }
             CenterPos = this.Position;
            

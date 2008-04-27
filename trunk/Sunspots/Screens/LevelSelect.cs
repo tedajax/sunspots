@@ -109,7 +109,8 @@ namespace StarForce_PendingTitle_
             PSParts.Initialize();
             PSParts.myScale = Vector3.One * (1.0f / 5.0f);
             PSParts.RandomColor = false;
-            PSParts.particleColor = Color.Red;
+            PSParts.particleColor = Color.Salmon;
+            PSParts.RefreshParticles();
         }
 
         public override void Update(GameTime gameTime)
