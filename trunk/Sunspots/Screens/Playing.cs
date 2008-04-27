@@ -176,7 +176,7 @@ namespace StarForce_PendingTitle_
             }
             StartingPosition = WaypointQueue.Dequeue();
 
-            MyPlayer = new AllRangeShip(PlayerModel);
+            MyPlayer = new RailShip(PlayerModel, WaypointQueue);
 
             ContentLoaded = "Setting up HUD";
 
@@ -218,13 +218,14 @@ namespace StarForce_PendingTitle_
                                                             Game1.Graphics,
                                                             "Content\\Particle",
                                                             "Content\\Effects\\Particle",
-                                                            50
+                                                            500
                                                            );
             PointSpriteParticles.Initialize();
             PointSpriteParticles.myPosition = Vector3.Zero;
             PointSpriteParticles.myScale = Vector3.One * 0.15f;
             PointSpriteParticles.RandomColor = false;
             PointSpriteParticles.particleColor = Color.Green;
+            PointSpriteParticles.ParticleSystem = ParticleSystemType.Stream;
             
 
             ContentLoaded = "Setting up Enemies";
@@ -314,8 +315,9 @@ namespace StarForce_PendingTitle_
         {
             Vector3 pos = Controllers[0].MainShip.Position;
             Matrix rot = Matrix.CreateFromQuaternion(Controllers[0].MainShip.NewRotation);
-            Vector3 pspos = Vector3.Transform(Vector3.Backward * 10, rot);
+            Vector3 pspos = Vector3.Transform(Vector3.Forward * 20, rot);
             PointSpriteParticles.myPosition = pspos + pos;//Controllers[0].MainShip.Position;
+            PointSpriteParticles.myRotation = Controllers[0].MainShip.NewRotation;
             PointSpriteParticles.Update(gameTime);
         }
      
