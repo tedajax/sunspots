@@ -241,7 +241,7 @@ namespace StarForce_PendingTitle_
                 {
                     float TempRotation = drawrotation.Z;
                     float sign = amount / Math.Abs(amount);
-                    TempRotation += (MathHelper.ToRadians(8*sign) );
+                    TempRotation += (MathHelper.ToRadians(5*sign) );
                     TempRotation = MathHelper.Clamp(TempRotation, MathHelper.ToRadians(-50), MathHelper.ToRadians(50));
                     drawrotation.Z = TempRotation;
                 }

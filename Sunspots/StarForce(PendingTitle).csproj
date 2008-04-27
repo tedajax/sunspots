@@ -89,6 +89,7 @@
     <Compile Include="Gameplay Classes\MainShip.cs" />
     <Compile Include="Gameplay Classes\ObjectCollisionManager.cs" />
     <Compile Include="Gameplay Classes\OnlineController.cs" />
+    <Compile Include="Gameplay Classes\PrimitiveBatch.cs" />
     <Compile Include="Gameplay Classes\Quad.cs" />
     <Compile Include="Gameplay Classes\Railship.cs" />
     <Compile Include="Gameplay Classes\RailshipOld.cs" />
