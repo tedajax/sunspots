@@ -154,8 +154,10 @@ namespace StarForce_PendingTitle_
                 {
                     RemoveList.Add(E);
                 }*/
-                OBB newObb = new OBB(playership.getSecondaryPosition(), new Vector3(10, 10, 10)*10f);
-                if (newObb.Intersects(E.getTriggerOBB()))
+                //OBB newObb = new OBB(playership.getSecondaryPosition(), new Vector3(50,50,50));
+                //if (newObb.LocalBoundingBox.Intersects(E.getTriggerOBB().LocalBoundingBox))
+                
+                if (Vector3.Distance(playership.getSecondaryPosition(), E.getTriggerOBB().Center)<E.getTriggerOBB().Bounds.X)
                 {
                     RemoveList.Add(E);
                 }
