@@ -73,6 +73,10 @@ namespace StarForce_PendingTitle_
             internal set { this.offsetPosition = value; }
         }
 
+        public Matrix Targetting
+        {
+            get { return this.TargettingMatrix; }
+        }
         public RailShip(Model pmodel, Queue<Vector3> waypointdata)
         {
             shipCenterPosition = Vector3.Zero;
@@ -295,7 +299,14 @@ namespace StarForce_PendingTitle_
 
             if (Vector3.Distance(ShipCenterPosition, TargetPosition) < 10)
             {
-                TargetPosition = Waypoints.Dequeue();
+                if (Waypoints.Count != 0)
+                {
+                    TargetPosition = Waypoints.Dequeue();
+                }
+                else
+                {
+                    Playing.switchToAllRange = true;
+                }
             }
             TargettingMatrix = Matrix.Lerp(TargettingMatrix, this.CreateLockOn(TargetPosition, this.shipCenterPosition), 0.1f);
 

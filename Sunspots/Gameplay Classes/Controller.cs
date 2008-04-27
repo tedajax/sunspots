@@ -35,6 +35,7 @@ namespace StarForce_PendingTitle_
         public MainShip MainShip
         {
             get { return this.mainShip; }
+            internal set { this.mainShip = value; }
         }
 
     }
