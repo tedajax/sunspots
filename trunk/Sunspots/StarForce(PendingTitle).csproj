@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\x86\Debug\</OutputPath>
+    <OutputPath>..\..\Build\Bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -73,6 +73,7 @@
     <Compile Include="EnemyManager\Death.cs" />
     <Compile Include="EnemyManager\Defensive.cs" />
     <Compile Include="EnemyManager\EnemyManager.cs" />
+    <Compile Include="EnemyManager\FlyUpEnemy.cs" />
     <Compile Include="EnemyManager\LoopyEnemy.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Gameplay Classes\3DObject.cs" />

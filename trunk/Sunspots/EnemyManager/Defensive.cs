@@ -59,9 +59,9 @@ namespace StarForce_PendingTitle_
             AwarenessSphere.Radius = 200;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void  Update(GameTime gameTime, MainShip PlayerShip)
         {
-            base.Update(gameTime);
+            base.Update(gameTime, PlayerShip);
 
             if (!KillThis)
             {
