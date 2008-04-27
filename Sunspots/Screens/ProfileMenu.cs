@@ -74,6 +74,8 @@ namespace StarForce_PendingTitle_
                     ProfileList.Add(new Profile(s.Substring(9, s.Length - 14)));
                 }
             }
+
+            ProfileList.Add(new Profile("STUPIDFUCKINGSHIT"));
         }
 
         public override void UnloadContent()

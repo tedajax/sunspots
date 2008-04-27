@@ -22,7 +22,7 @@ namespace StarForce_PendingTitle_
         /// <summary>
         /// Changing Stuff This is fun
         /// </summary>
-        GraphicsDeviceManager graphics;
+        static GraphicsDeviceManager graphics;
         ContentManager content;
 
         WindowManager windowManager;
@@ -37,6 +37,11 @@ namespace StarForce_PendingTitle_
         public static float FieldOfView = 45f;
         public static float DefaultFieldOfView = FieldOfView;
         
+        public static GraphicsDeviceManager Graphics
+        {
+            get { return graphics; }
+        }
+
         public Game1()
         {
            

@@ -46,10 +46,11 @@ namespace StarForce_PendingTitle_
         public static ParticleSystem3D SmokeTrailParticles;
         public static ParticleSystem3D SmokeParticles;
         public static ParticleSystem3D FireParticles;
-
              
         public static BoundingFrustum ScreenFrustum;
-        
+
+        public static PointSpriteParticles PointSpriteParticles;
+
         #region exposestuff
 
         public MyControls Controls
@@ -126,6 +127,15 @@ namespace StarForce_PendingTitle_
             this.Game.Components.Add(SmokeTrailParticles);
             this.Game.Components.Add(SmokeParticles);
             this.Game.Components.Add(FireParticles);
+
+            PointSpriteParticles = new PointSpriteParticles(this.Game,
+                                                            Game1.Graphics,
+                                                            "Content\\Particle",
+                                                            "Content\\Effects\\Particle",
+                                                            100
+                                                           );
+            PointSpriteParticles.myPosition = Vector3.Zero;
+           
         }
 
         protected override void LoadContent()

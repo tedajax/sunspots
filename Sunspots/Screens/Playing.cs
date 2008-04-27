@@ -33,8 +33,7 @@ namespace StarForce_PendingTitle_
         CollisionManager CollisionManager;
 
         Texture2D Dark;
-        float DarkOpacity = 255f;
-
+        
         List<Controller> Controllers;
 
         SpriteFont gameFont;
@@ -61,6 +60,8 @@ namespace StarForce_PendingTitle_
 
         public static Missle PlayerMissile;
         public static Model MissleModel;
+
+        PointSpriteParticles PointSpriteParticles;
 
         Boundries Bounds = new Boundries();
 
@@ -175,7 +176,7 @@ namespace StarForce_PendingTitle_
             }
             StartingPosition = WaypointQueue.Dequeue();
 
-            MyPlayer = new RailShip(PlayerModel, WaypointQueue);
+            MyPlayer = new AllRangeShip(PlayerModel);
 
             ContentLoaded = "Setting up HUD";
 
@@ -212,6 +213,19 @@ namespace StarForce_PendingTitle_
             ContentLoaded = "Setting up Particle System";
 
             ParticleSystem.LoadGraphicsContent(WindowManager.GraphicsDevice, Content);
+            
+            PointSpriteParticles = new PointSpriteParticles(WindowManager.Game,
+                                                            Game1.Graphics,
+                                                            "Content\\Particle",
+                                                            "Content\\Effects\\Particle",
+                                                            50
+                                                           );
+            PointSpriteParticles.Initialize();
+            PointSpriteParticles.myPosition = Vector3.Zero;
+            PointSpriteParticles.myScale = Vector3.One * 0.15f;
+            PointSpriteParticles.RandomColor = false;
+            PointSpriteParticles.particleColor = Color.Green;
+            
 
             ContentLoaded = "Setting up Enemies";
             EnemiesKilled = Content.Load<Texture2D>("Content\\Hud\\enemieskilled");
@@ -296,6 +310,14 @@ namespace StarForce_PendingTitle_
             if (Mode == "Die") Die(gameTime);
         }
 
+        private void PointSpriteUpdate(GameTime gameTime)
+        {
+            Vector3 pos = Controllers[0].MainShip.Position;
+            Matrix rot = Matrix.CreateFromQuaternion(Controllers[0].MainShip.NewRotation);
+            Vector3 pspos = Vector3.Transform(Vector3.Backward * 10, rot);
+            PointSpriteParticles.myPosition = pspos + pos;//Controllers[0].MainShip.Position;
+            PointSpriteParticles.Update(gameTime);
+        }
      
         public void Run(GameTime gameTime)
         {
@@ -311,6 +333,7 @@ namespace StarForce_PendingTitle_
             ParticleSystem.Update(gameTime);
             EnemyManagement.Update(gameTime, Controllers[0].MainShip);
             LaserManagement.Update(gameTime);
+            PointSpriteUpdate(gameTime);            
 
             if (EnemyManagement.GetEnemyCount() == 0)
             {
@@ -381,11 +404,13 @@ namespace StarForce_PendingTitle_
                 LaserManagement.Draw("NormalDepth");
                 PlayerMissile.Draw("NormalDepth");
                 ParticleSystem.Draw(gameTime, WindowManager.GraphicsDevice, CameraClass.getLookAt());
+                PointSpriteParticles.Draw(gameTime);
                 WindowManager.ExplosionSmokeParticles.SetCamera(CameraClass.getLookAt(), CameraClass.getPerspective());
                 WindowManager.ExplosionParticles.SetCamera(CameraClass.getLookAt(), CameraClass.getPerspective());
                 WindowManager.SmokeParticles.SetCamera(CameraClass.getLookAt(), CameraClass.getPerspective());
                 WindowManager.SmokeTrailParticles.SetCamera(CameraClass.getLookAt(), CameraClass.getPerspective());
                 WindowManager.FireParticles.SetCamera(CameraClass.getLookAt(), CameraClass.getPerspective());
+                
             device.SetRenderTarget(0, sceneRenderTarget);
       
             device.Clear(Color.Black);
@@ -409,7 +434,7 @@ namespace StarForce_PendingTitle_
             WindowManager.SmokeTrailParticles.Draw(gameTime);
             WindowManager.FireParticles.Draw(gameTime);
             ParticleSystem.Draw(gameTime, WindowManager.GraphicsDevice, CameraClass.getLookAt());
-
+            PointSpriteParticles.Draw(gameTime);
      
             device.SetRenderTarget(0, null);
             device.Clear(Color.Black);
@@ -496,7 +521,6 @@ namespace StarForce_PendingTitle_
 
         public void Load(GameTime gameTime)
         {
-            DarkOpacity = 0f;
             if (NetClientClass.Client != null && NetClientClass.Client.Status == NetConnectionStatus.Connected)
             {
                 if (ContentLoaded == "Done" && SentServerLoaded == false)

@@ -188,49 +188,46 @@ namespace StarForce_PendingTitle_
             {
                 createParticle(new Vector3(), new Vector3());
             }
-
+            
             SpriteVertex newsprite = Sprites[0];
-                newsprite.Position = new Vector3((float)200 / 1000f,(1500/2) / 1000f, 8.8f);
-                newsprite.Position = Vector3.Transform(newsprite.Position, ship.getNonMovementPositionRotationMatrix() );
-                //newsprite.Velocity = new Vector3();
-                //newsprite.Velocity = Vector3.Transform(newsprite.Velocity, Matrix.CreateFromQuaternion(ship.NewRotation)*ship.getDrawYawPitchRoll());
-                newsprite.Acceleration = new Vector3();
-                newsprite.Color = Color.Blue;
-                size = particlesize;
-                if (ship.isBoosting()) size += 1 * particlesize/3;
-                Sprites[0] = newsprite;
-                //Sprites.Add(newsprite);
+            newsprite.Position = new Vector3(500, -500, 500);
+            //newsprite.Position = new Vector3((float)200 / 1000f,(1500/2) / 1000f, 8.8f);
+            //newsprite.Position = Vector3.Transform(newsprite.Position, ship.getNonMovementPositionRotationMatrix() );
+            //newsprite.Velocity = new Vector3();
+            //newsprite.Velocity = Vector3.Transform(newsprite.Velocity, Matrix.CreateFromQuaternion(ship.NewRotation)*ship.getDrawYawPitchRoll());
+            newsprite.Acceleration = new Vector3();
+            newsprite.Color = Color.Blue;
+            size = particlesize;
+            if (ship.isBoosting()) size += 1 * particlesize/3;
+            Sprites[0] = newsprite;
+            //Sprites.Add(newsprite);
 
 
 
-                 newsprite = Sprites[1];
-                newsprite.Position = new Vector3 (0,0,-350);
-                newsprite.Position = Vector3.Transform(newsprite.Position, ship.getNonMovementPositionRotationMatrix());
-                //newsprite.Velocity = new Vector3();
-                //newsprite.Velocity = Vector3.Transform(newsprite.Velocity, Matrix.CreateFromQuaternion(ship.NewRotation)*ship.getDrawYawPitchRoll());
-                newsprite.Acceleration = new Vector3();
-                newsprite.Color = Color.Blue;
-                Sprites[1] = newsprite;
+             newsprite = Sprites[1];
+            newsprite.Position = new Vector3 (0,0,-350);
+            newsprite.Position = Vector3.Transform(newsprite.Position, ship.getNonMovementPositionRotationMatrix());
+            //newsprite.Velocity = new Vector3();
+            //newsprite.Velocity = Vector3.Transform(newsprite.Velocity, Matrix.CreateFromQuaternion(ship.NewRotation)*ship.getDrawYawPitchRoll());
+            newsprite.Acceleration = new Vector3();
+            newsprite.Color = Color.Blue;
+            Sprites[1] = newsprite;
 
-                if (controls.getMissle() == 1)
+            if (controls.getMissle() == 1)
+            {
+                if (Targeted)
                 {
-                    if (Targeted)
-                    {
-                        SpriteToUse = "Targetted";
-                    }
-                    else
-                    {
-                        SpriteToUse = "Targetting";
-                    }
+                    SpriteToUse = "Targetted";
                 }
                 else
                 {
-                    SpriteToUse = "Normal";
+                    SpriteToUse = "Targetting";
                 }
-                   
-
-              
-                
+            }
+            else
+            {
+                SpriteToUse = "Normal";
+            }
         }
 
         public void Update(GameTime gametime)
