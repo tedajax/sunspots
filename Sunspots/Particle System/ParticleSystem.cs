@@ -94,6 +94,7 @@ namespace StarForce_PendingTitle_
             m_vDec = new VertexDeclaration(graphics, SpriteVertex.VertexElements);
             m_effect = content.Load<Effect>("Content\\Effects\\PointSprite");
             SunTexture = content.Load<Texture2D>("Content\\sun");
+            Sprite1 = content.Load<Texture2D>("Content\\start");
             createParticle(new Vector3(), new Vector3());
         }
 
@@ -165,6 +166,19 @@ namespace StarForce_PendingTitle_
 
                 Sprites.Add(newsprite);
             }
+
+        }
+
+        public static void addThrusterSpriteTransition(Obj3d ship)
+        {
+            SpriteVertex newsprite = Sprites[0];
+            newsprite.Position = new Vector3(0, 0, .2f);
+            newsprite.Position = Vector3.Transform(newsprite.Position, Matrix.CreateFromYawPitchRoll(ship.getRotation().Y, ship.getRotation().X, ship.getRotation().Z));
+            newsprite.Position += ship.getPosition();
+            newsprite.Acceleration = new Vector3();
+            newsprite.Color = Color.Blue;
+            size = particlesize+(particlesize*1/3);
+            Sprites[0] = newsprite;
 
         }
 
@@ -247,6 +261,47 @@ namespace StarForce_PendingTitle_
                  }
                
             }
+        }
+
+        public void Draw3(GameTime gameTime, GraphicsDevice graphics)
+        {
+
+            graphics.RenderState.PointSpriteEnable = true;
+            graphics.RenderState.PointSize = (float)size;
+            graphics.RenderState.AlphaBlendEnable = true;
+            graphics.RenderState.AlphaBlendOperation = BlendFunction.Add;
+            graphics.RenderState.SourceBlend = Blend.SourceAlpha;
+            // graphics.RenderState.DestinationBlend = Blend.One;
+            graphics.RenderState.SeparateAlphaBlendEnabled = false;
+            graphics.RenderState.AlphaTestEnable = true;
+            graphics.RenderState.AlphaFunction = CompareFunction.Greater;
+            graphics.RenderState.ReferenceAlpha = 0;
+            graphics.RenderState.DepthBufferWriteEnable = true;
+            graphics.VertexDeclaration = m_vDec;
+            graphics.RenderState.DepthBufferEnable = true;
+            m_effect.Parameters["WorldViewProj"].SetValue(Matrix.Identity * CameraClass.getLookAt() * CameraClass.getPerspective());
+            m_effect.Parameters["SpriteTexture"].SetValue(Sprite1);
+            m_effect.Parameters["Rotation"].SetValue(Matrix.Identity);
+            m_effect.Begin();
+            foreach (EffectPass pass in m_effect.CurrentTechnique.Passes)
+            {
+                pass.Begin();
+                if (Sprites.Count > 0)
+                {
+                    SpriteVertex[] m_sprites = Sprites.ToArray();
+                    graphics.DrawUserPrimitives<SpriteVertex>(PrimitiveType.PointList, m_sprites, 0, 1);
+                }
+                pass.End();
+            }
+            m_effect.End();
+            graphics.RenderState.AlphaBlendEnable = false;
+            graphics.RenderState.SeparateAlphaBlendEnabled = false;
+            graphics.RenderState.AlphaTestEnable = false;
+            graphics.RenderState.DepthBufferEnable = true;
+            graphics.RenderState.PointSpriteEnable = false;
+            graphics.RenderState.DepthBufferWriteEnable = true;
+            graphics.RenderState.SourceBlend = Blend.SourceAlpha;
+            graphics.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
         }
 
         public void Draw2(GameTime gameTime, GraphicsDevice graphics)
