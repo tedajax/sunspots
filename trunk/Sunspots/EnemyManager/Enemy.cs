@@ -320,7 +320,7 @@ namespace StarForce_PendingTitle_
             UpdateCollision();
         }
 
-        public void Draw(string technique)
+        public virtual void Draw(string technique)
         {
             EnemyObj.DisplayModel(CameraClass.getLookAt(), technique, RotationOffset);
         }
