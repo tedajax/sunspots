@@ -12,6 +12,7 @@ Sunspots Check List
 			- Fade out screen
 	- Level 1
 		- Fix waypoints to be more smooth
+		- Fix up down movement
 		- Add enemies
 			- Types of Enemies
 				- Fly up enemy (suprise enemy) 

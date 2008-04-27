@@ -30,6 +30,8 @@ namespace StarForce_PendingTitle_
 
         ParticleSystem Particles;
 
+        PrimitiveBatch PrimitiveBatch;
+
         Vector3 CameraRotation = new Vector3();
         float CameraDistance = 100f;
 
@@ -39,6 +41,10 @@ namespace StarForce_PendingTitle_
 
         Obj3d Mothership;
         Vector3 MothershipRotation = new Vector3();
+
+        float TransitionRotation = 0;
+
+        Obj3d PlayerShip;
         
         public LevelSelect(string sysname)
         {
@@ -68,7 +74,7 @@ namespace StarForce_PendingTitle_
             Particles = new ParticleSystem();
             Particles.LoadGraphicsContent2(WindowManager.GraphicsDevice, WindowManager.Content);
 
-            
+          
 
             // Create two custom rendertargets.
             PresentationParameters pp = WindowManager.GraphicsDevice.PresentationParameters;
@@ -80,12 +86,17 @@ namespace StarForce_PendingTitle_
             normalDepthRenderTarget = new RenderTarget2D(WindowManager.GraphicsDevice,
                 pp.BackBufferWidth, pp.BackBufferHeight, 1,
                 pp.BackBufferFormat, pp.MultiSampleType, pp.MultiSampleQuality);
+
+            PrimitiveBatch = new PrimitiveBatch(WindowManager.GraphicsDevice);
+
+            
         }
 
         public override void Update(GameTime gameTime)
         {
             if (Mode.Equals("Setup")) Setup();
             if (Mode.Equals("PlanetSelect")) PlanetSelectRun(gameTime);
+            if (Mode.Equals("Transition")) TransitionModeRun(gameTime);
             if (Mode.Equals("LevelSelect")) LevelSelectRun(gameTime);
             if (Mode.Equals("Die")) Die();
 
@@ -133,11 +144,87 @@ namespace StarForce_PendingTitle_
             Mothership = new Obj3d(YourMom);
             Mothership.setScale(.07f);
 
+            Model ship = WindowManager.Content.Load<Model>("Content\\unwrappedmodel");
+            ChangeEffectUsedByModel(ship, cartoonEffect);
+            PlayerShip = new Obj3d(ship);
+            PlayerShip.setScale(.03f);
+            PlayerShip.setRotation(new Vector3(0, MathHelper.ToRadians(180), 0));
+            
+
             Mode = "PlanetSelect";
             if (WindowManager.Controls.getShoot() > 0)
             {
                 SelectPressed = true;
             }
+            CameraRotation = new Vector3(8.69f, 1.30f, 0);
+        }
+
+        public Matrix CreateLockOn(Vector3 Target, Vector3 Position)
+        {
+            Matrix NewMatrix;
+            NewMatrix = Matrix.Identity;
+            NewMatrix.Forward = Target - Position;
+            NewMatrix.Forward = Vector3.Normalize(NewMatrix.Forward);
+            NewMatrix.Right = Vector3.Cross(NewMatrix.Forward, Vector3.Up);
+            NewMatrix.Right = Vector3.Normalize(NewMatrix.Right);
+            NewMatrix.Up = Vector3.Cross(NewMatrix.Right, NewMatrix.Forward);
+            NewMatrix.Up = Vector3.Normalize(NewMatrix.Up);
+
+            return NewMatrix;
+
+        }
+
+        private void TransitionModeRun(GameTime gameTime)
+        {
+            Vector3 OldPosition = Planets[0].Position;
+            float OldRotation = Planets[0].RevolutionPosition;
+            Planets[0].Update2(gameTime);
+            Planets[0].Position = Vector3.SmoothStep(OldPosition, Vector3.Zero, 0.1f);
+
+            Planets[0].RevolutionPosition = OldRotation;
+            Vector3 MotherShipPosition = new Vector3(0, 0, -8);
+            float Rotation = MathHelper.ToDegrees(MothershipRotation.Y);
+            if (Rotation > 360) Rotation -= 360;
+            if (MathHelper.Distance(Rotation, 0) > 7)
+             {
+               MothershipRotation.Y += 0.05f;
+             }
+
+            TransitionRotation = MathHelper.SmoothStep(TransitionRotation, MathHelper.PiOver2, .1f);
+            MotherShipPosition = Vector3.Transform(MotherShipPosition, CreateFromVector3(MothershipRotation));
+            Mothership.setPosition(Planets[0].GetPosition() + MotherShipPosition);
+            Mothership.setRotation(MothershipRotation + new Vector3(0, MathHelper.PiOver2 + TransitionRotation, 0));
+            PlayerShip.setPosition(Planets[0].GetPosition() + MotherShipPosition);
+
+            if (Vector3.Distance(Planets[0].Position, Vector3.Zero) < 15 && MathHelper.Distance(Rotation,0)<=7)
+            {
+                Planets[0].Update2(gameTime);
+
+               // Vector3 MotherShipPosition = Mothership.getPosition();
+                Vector3 CameraLockOnPoint = new Vector3(0, 0, -5);
+                CameraLockOnPoint = Vector3.Transform(CameraLockOnPoint, Matrix.CreateFromYawPitchRoll(PlayerShip.getRotation().Y, PlayerShip.getRotation().X, PlayerShip.getRotation().Z));
+                CameraLockOnPoint += MotherShipPosition;
+                CameraClass.CameraPointingAt = Vector3.Lerp(CameraClass.CameraPointingAt, PlayerShip.getPosition(), .1f);
+                Matrix RotationMatrix = CreateLockOn(CameraLockOnPoint, CameraClass.Position);
+                /*if (Vector3.Distance(CameraClass.Position,CameraLockOnPoint) > 1f)
+                {
+                    Vector3 Move = new Vector3(0, 0, -1);
+                    Move = Vector3.Transform(Move, RotationMatrix);
+                    CameraClass.Position += Move;
+                }*/
+                Vector3 Move = new Vector3(0, 0, -10);
+                Move = Vector3.Transform(Move, RotationMatrix);
+                Move += PlayerShip.getPosition();
+                //CameraClass.Position = Vector3.SmoothStep(CameraClass.Position, CameraLockOnPoint, .05f);
+                CameraClass.Position = Vector3.Lerp(CameraClass.Position, CameraLockOnPoint, .03f);
+            }
+            else
+            {
+               
+            
+
+            }
+            
         }
 
         private void PlanetSelectRun(GameTime gameTime)
@@ -146,19 +233,17 @@ namespace StarForce_PendingTitle_
             tempvector = Vector3.Transform(tempvector, CreateFromVector3(CameraRotation));
             CameraClass.Position = tempvector;
             CameraClass.CameraPointingAt = Vector3.Zero;
-
+            
             if (WindowManager.Controls.getShoot() > 0 && !SelectPressed)
             {
-                WindowManager.AddScreen(new Playing(), WindowManager.FindLastScreenPosition() - 1);
+                Mode = "Transition";
+                /*WindowManager.AddScreen(new Playing(), WindowManager.FindLastScreenPosition() - 1);
                 SelectPressed = true;
-                WindowManager.removeScreen(this);
+                WindowManager.removeScreen(this);*/
             }
 
             if (WindowManager.Controls.getShoot() == 0)
                 SelectPressed = false;
-
-            CameraRotation.Y += (float)(Mouse.GetState().X - OldMouseX) / 64f;
-            CameraRotation.X += (float)(Mouse.GetState().Y - OldMouseY) / 64f;
                         
             CameraDistance += (float)(Mouse.GetState().ScrollWheelValue - OldScrollWheel) / 64f;
 
@@ -166,7 +251,7 @@ namespace StarForce_PendingTitle_
             {
                 p.Update(gameTime);
             }
-            Vector3 MotherShipPosition = new Vector3(0, 0, -5);
+            Vector3 MotherShipPosition = new Vector3(0, 0, -8);
             MothershipRotation.Y += 0.05f;
             MotherShipPosition = Vector3.Transform(MotherShipPosition, CreateFromVector3(MothershipRotation));
             Mothership.setPosition(Planets[0].GetPosition() + MotherShipPosition);
@@ -232,7 +317,42 @@ namespace StarForce_PendingTitle_
                 Bloom.calleddrawalready = false;
                 Bloom.Draw(gameTime);
 
-                Planets[0].Draw2D(WindowManager.SpriteBatch, InfoFont);
+                //Planets[0].Draw2D(WindowManager.SpriteBatch, InfoFont);
+                WindowManager.SpriteBatch.Begin();
+                WindowManager.SpriteBatch.DrawString(InfoFont, CameraRotation.ToString(), Vector2.Zero, Color.White);
+                WindowManager.SpriteBatch.End();
+            }
+            if (Mode.Equals("Transition"))
+            {
+                WindowManager.GraphicsDevice.RenderState.DepthBufferEnable = true;
+                WindowManager.GraphicsDevice.RenderState.DepthBufferWriteEnable = true;
+
+                RenderState renderState = WindowManager.GraphicsDevice.RenderState;
+
+                renderState.AlphaBlendEnable = true;
+                renderState.AlphaTestEnable = false;
+                renderState.DepthBufferEnable = true;
+
+                GraphicsDevice device = WindowManager.GraphicsDevice;
+                device.SetRenderTarget(0, normalDepthRenderTarget);
+
+                Planets[0].Draw("NormalDepth");
+                Mothership.DisplayModel(CameraClass.getLookAt(), "NormalDepth", Vector3.Zero);
+                PlayerShip.DisplayModel(CameraClass.getLookAt(), "NormalDepth", Vector3.Zero);
+                device.SetRenderTarget(0, sceneRenderTarget);
+                device.Clear(Color.Black);
+
+                skySphere.Draw(gameTime, CameraClass.getLookAt());
+
+                Planets[0].Draw("Toon");
+                Mothership.DisplayModel(CameraClass.getLookAt(), "Toon", Vector3.Zero);
+                PlayerShip.DisplayModel(CameraClass.getLookAt(), "Toon", Vector3.Zero);
+                device.SetRenderTarget(0, null);
+                device.Clear(Color.Black);
+                ApplyPostprocess();
+                Bloom.calleddrawalready = false;
+                Bloom.Draw(gameTime);
+
             }
             if (Mode.Equals("LevelSelect"))
             {

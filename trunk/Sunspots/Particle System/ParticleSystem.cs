@@ -64,7 +64,7 @@ namespace StarForce_PendingTitle_
         }
 
         static Effect m_effect;
-        public const int particlesize = 30;
+        public const int particlesize = 45;
         public static int size = 80;
 
         Texture2D Sprite1;

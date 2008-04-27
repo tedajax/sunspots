@@ -44,11 +44,18 @@ namespace StarForce_PendingTitle_
         public float RevolutionPosition
         {
             get { return revolutionpos; }
+            set { revolutionpos = value; }
         }
 
         public string Name
         {
             get { return name; }
+        }
+
+        public Vector3 Position
+        {
+            get { return PlanetObj.getPosition(); }
+            internal set { PlanetObj.setPosition(value); }
         }
 
         public Vector3 GetPosition() { return PlanetObj.getPosition(); }
@@ -83,13 +90,15 @@ namespace StarForce_PendingTitle_
             rotatepos += rotaterate;
             PlanetObj.setPosition(new Vector3((float)Math.Cos(revolutionpos) * radius, 0, (float)Math.Sin(revolutionpos) * radius));
             PlanetObj.setRotation(new Vector3(0, rotatepos, 0));
+            
+        }
 
-            //delete this
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                lightpos -= 0.01f;
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                lightpos += 0.01f;
-            //delete above
+        public void Update2(GameTime gameTime)
+        {
+            
+            //PlanetObj.setPosition(new Vector3((float)Math.Cos(revolutionpos) * radius, 0, (float)Math.Sin(revolutionpos) * radius));
+            PlanetObj.setRotation(new Vector3(0, rotatepos, 0));
+
         }
 
         public void Draw(string technique)
