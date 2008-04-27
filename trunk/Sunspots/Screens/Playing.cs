@@ -80,6 +80,8 @@ namespace StarForce_PendingTitle_
 
         ContentManager Content;
 
+        public static bool switchToAllRange;
+
         public Playing()
         {
             Mode = "Load";
@@ -89,6 +91,7 @@ namespace StarForce_PendingTitle_
             MissionComplete = false;
             VictoryTimer = new TimeSpan(0, 0, 0, 3);
             ShootOldState = 0f;
+            switchToAllRange = false;
             
         }
 
@@ -177,7 +180,6 @@ namespace StarForce_PendingTitle_
             StartingPosition = WaypointQueue.Dequeue();
 
             MyPlayer = new RailShip(PlayerModel, WaypointQueue);
-
             ContentLoaded = "Setting up HUD";
 
             Hud hud = new Hud();
@@ -326,6 +328,13 @@ namespace StarForce_PendingTitle_
      
         public void Run(GameTime gameTime)
         {
+            if (switchToAllRange == true)
+            {
+                switchToAllRange = false;
+                AllRangeShip newShip = AllRangeShip.switchToAllRange((RailShip)Controllers[0].MainShip, PlayerModel);
+                Controllers[0].MainShip = newShip;
+            }
+
             skySphere.Update(gameTime);
             foreach (Controller c in Controllers)
             {

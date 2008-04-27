@@ -74,7 +74,7 @@ namespace StarForce_PendingTitle_
             this.position = StarForce_PendingTitle_.Playing.StartingPosition;
             velocity = Vector3.Zero;
             Randomizer = new Random();
-            Mode = "Spawning";
+            Mode = "Playing";
             SpawnTimeSpan = new TimeSpan(0, 0, 0, 5);
             DeathTimeSpan = new TimeSpan(0, 0, 0, 3);
             SavedPosition = new Vector3();
@@ -86,6 +86,18 @@ namespace StarForce_PendingTitle_
             
 
         }
+
+        public static AllRangeShip switchToAllRange(RailShip mainship, Model ship)
+        {
+            AllRangeShip newship = new AllRangeShip(ship);
+            newship.position = mainship.Position;
+
+            newship.newrotation = Quaternion.CreateFromRotationMatrix(mainship.getDrawYawPitchRoll() * mainship.Targetting);
+            return newship;
+        }
+            
+        
+
         /// <summary>
         /// This function is called at respawn. Initializes Everything.
         /// </summary>
