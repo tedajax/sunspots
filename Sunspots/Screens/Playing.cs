@@ -62,6 +62,7 @@ namespace StarForce_PendingTitle_
         public static Model MissleModel;
 
         PointSpriteParticles PointSpriteParticles;
+        PointSpriteParticles JetParts;
 
         Boundries Bounds = new Boundries();
 
@@ -179,6 +180,7 @@ namespace StarForce_PendingTitle_
             }
             StartingPosition = WaypointQueue.Dequeue();
 
+            //MyPlayer = new AllRangeShip(PlayerModel);
             MyPlayer = new RailShip(PlayerModel, WaypointQueue);
             ContentLoaded = "Setting up HUD";
 
@@ -226,9 +228,23 @@ namespace StarForce_PendingTitle_
             PointSpriteParticles.myPosition = Vector3.Zero;
             PointSpriteParticles.myScale = Vector3.One * 0.15f;
             PointSpriteParticles.RandomColor = false;
-            PointSpriteParticles.particleColor = Color.Green;
+            PointSpriteParticles.particleColor = Color.Salmon;
             PointSpriteParticles.ParticleSystem = ParticleSystemType.Stream;
+            PointSpriteParticles.RefreshParticles();
             
+            JetParts = new PointSpriteParticles(WindowManager.Game,
+                                                Game1.Graphics,
+                                                "Content\\Particle",
+                                                "Content\\Effects\\Particle",
+                                                50
+                                               );
+            JetParts.Initialize();
+            JetParts.myPosition = Vector3.Zero;
+            JetParts.myScale = Vector3.One * 0.15f;
+            JetParts.RandomColor = false;
+            JetParts.particleColor = Color.CornflowerBlue;
+            JetParts.ParticleSystem = ParticleSystemType.Jet;
+            JetParts.RefreshParticles();
 
             ContentLoaded = "Setting up Enemies";
             EnemiesKilled = Content.Load<Texture2D>("Content\\Hud\\enemieskilled");
@@ -318,12 +334,21 @@ namespace StarForce_PendingTitle_
 
         private void PointSpriteUpdate(GameTime gameTime)
         {
+            if (Controllers[0].MainShip.isBoosting())
+                PointSpriteParticles.Show = true;
+            else
+                PointSpriteParticles.Show = false;
             Vector3 pos = Controllers[0].MainShip.Position;
             Matrix rot = Controllers[0].MainShip.getNonMovementPositionRotationMatrix();//Matrix.CreateFromQuaternion(Controllers[0].MainShip.NewRotation);
-            Vector3 pspos = Vector3.Transform(Vector3.Forward * 20, rot);
+            Vector3 pspos = Vector3.Transform(Vector3.Forward * 40, rot);
             PointSpriteParticles.myPosition = pspos;//Controllers[0].MainShip.Position;
             PointSpriteParticles.myRotation = Quaternion.CreateFromRotationMatrix(rot);//Controllers[0].MainShip.NewRotation;
             PointSpriteParticles.Update(gameTime);
+
+            pspos = Vector3.Transform(Vector3.Backward * 10, rot);
+            JetParts.myPosition = pspos;
+            JetParts.myRotation = Quaternion.CreateFromRotationMatrix(rot);
+            JetParts.Update(gameTime);
         }
      
         public void Run(GameTime gameTime)
@@ -419,6 +444,7 @@ namespace StarForce_PendingTitle_
                 PlayerMissile.Draw("NormalDepth");
                 ParticleSystem.Draw(gameTime, WindowManager.GraphicsDevice, CameraClass.getLookAt());
                 PointSpriteParticles.Draw(gameTime);
+                JetParts.Draw(gameTime);
                 WindowManager.ExplosionSmokeParticles.SetCamera(CameraClass.getLookAt(), CameraClass.getPerspective());
                 WindowManager.ExplosionParticles.SetCamera(CameraClass.getLookAt(), CameraClass.getPerspective());
                 WindowManager.SmokeParticles.SetCamera(CameraClass.getLookAt(), CameraClass.getPerspective());
@@ -449,7 +475,8 @@ namespace StarForce_PendingTitle_
             WindowManager.FireParticles.Draw(gameTime);
             ParticleSystem.Draw(gameTime, WindowManager.GraphicsDevice, CameraClass.getLookAt());
             PointSpriteParticles.Draw(gameTime);
-     
+            JetParts.Draw(gameTime);
+
             device.SetRenderTarget(0, null);
             device.Clear(Color.Black);
             ApplyPostprocess();

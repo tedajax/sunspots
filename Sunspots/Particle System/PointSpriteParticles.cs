@@ -11,7 +11,8 @@ namespace StarForce_PendingTitle_
     {
         Ball,
         Explosion,
-        Stream
+        Stream,
+        Jet
     }
     public class PointSpriteParticles
     {
@@ -91,6 +92,15 @@ namespace StarForce_PendingTitle_
 
         public Color particleColor;
         private bool randomColor;
+
+        private bool show = true;
+
+        public bool Show
+        {
+            get { return show; }
+            set { show = value; }
+        }
+
         public bool RandomColor
         {
             get { return randomColor; }
@@ -176,7 +186,7 @@ namespace StarForce_PendingTitle_
             RefreshParticles();
         }
 
-        private void RefreshParticles()
+        public void RefreshParticles()
         {            
             m_sprites = new VertexParticle[partCount];
             for (int i = 0; i < m_sprites.Length; i++)
@@ -204,6 +214,42 @@ namespace StarForce_PendingTitle_
                 case ParticleSystemType.Stream:
                     Stream();
                     break;
+                case ParticleSystemType.Jet:
+                    Jet();
+                    break;
+            }
+        }
+
+        public virtual void Jet()
+        {
+            for (int i = 0; i < m_sprites.Length; i++)
+            {
+                float angle = m_sprites[i].Data.X;
+                float radius = m_sprites[i].Data.Z;
+
+                float backdistance = m_sprites[i].Data.W;
+
+                angle += 0.3f;
+                if (angle > 360)
+                    angle = angle - 360;
+
+                radius += 0.2f;
+
+                float sinangle = (float)Math.Sin((double)MathHelper.ToRadians(angle));
+                float cosangle = (float)Math.Cos((double)MathHelper.ToRadians(angle));
+
+                m_sprites[i].Position = new Vector3(sinangle * radius, cosangle * radius, m_sprites[i].Position.Z);
+                
+                m_sprites[i].Position.Z += 2f;
+
+                if (m_sprites[i].Position.Z > backdistance)
+                {
+                    radius = 0;
+                    backdistance = m_rand.Next(20, 40);
+                    m_sprites[i].Position = Vector3.Zero;
+                }
+
+                m_sprites[i].Data = new Vector4(angle, 0, radius, backdistance);
             }
         }
 
@@ -347,25 +393,28 @@ namespace StarForce_PendingTitle_
             myDevice.VertexDeclaration = m_vDec;
 
             Matrix wvp = Matrix.CreateScale(5) * (Matrix.CreateScale(myScale) * Matrix.CreateFromQuaternion(myRotation) * Matrix.CreateTranslation(myPosition)) * CameraClass.getLookAt() * CameraClass.getPerspective();
-            effect.Parameters["WorldViewProj"].SetValue(wvp);            
+            effect.Parameters["WorldViewProj"].SetValue(wvp);
 
-            effect.Begin();
-            for (int ps = 0; ps < effect.CurrentTechnique.Passes.Count; ps++)
+            if (show)
             {
-                effect.CurrentTechnique.Passes[ps].Begin();
-
-                if (m_sprites.Length >= 15000)
+                effect.Begin();
+                for (int ps = 0; ps < effect.CurrentTechnique.Passes.Count; ps++)
                 {
-                    myDevice.DrawUserPrimitives<VertexParticle>(PrimitiveType.PointList, m_sprites, 0, m_sprites.Length / 3);
-                    myDevice.DrawUserPrimitives<VertexParticle>(PrimitiveType.PointList, m_sprites, m_sprites.Length / 3, m_sprites.Length / 3);
-                    myDevice.DrawUserPrimitives<VertexParticle>(PrimitiveType.PointList, m_sprites, 2 * m_sprites.Length / 3, m_sprites.Length / 3);
-                }
-                else
-                    myDevice.DrawUserPrimitives<VertexParticle>(PrimitiveType.PointList, m_sprites, 0, m_sprites.Length);
+                    effect.CurrentTechnique.Passes[ps].Begin();
 
-                effect.CurrentTechnique.Passes[ps].End();
+                    if (m_sprites.Length >= 15000)
+                    {
+                        myDevice.DrawUserPrimitives<VertexParticle>(PrimitiveType.PointList, m_sprites, 0, m_sprites.Length / 3);
+                        myDevice.DrawUserPrimitives<VertexParticle>(PrimitiveType.PointList, m_sprites, m_sprites.Length / 3, m_sprites.Length / 3);
+                        myDevice.DrawUserPrimitives<VertexParticle>(PrimitiveType.PointList, m_sprites, 2 * m_sprites.Length / 3, m_sprites.Length / 3);
+                    }
+                    else
+                        myDevice.DrawUserPrimitives<VertexParticle>(PrimitiveType.PointList, m_sprites, 0, m_sprites.Length);
+
+                    effect.CurrentTechnique.Passes[ps].End();
+                }
+                effect.End();
             }
-            effect.End();
 
             if (myDevice.RenderState.PointSpriteEnable != PointSpriteEnable)
                 myDevice.RenderState.PointSpriteEnable = PointSpriteEnable;
