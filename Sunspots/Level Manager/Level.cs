@@ -50,13 +50,12 @@ namespace StarForce_PendingTitle_
                 count++;
             }
 
-
             
-            //Model Model = Content.Load<Model>("Content\\GokzLevel\\demolevel2");
+            Model Model = Content.Load<Model>("Content\\LevelObjects\\demolevel2");
            
-           // Dictionary<string, object> tagData = Model.Tag as Dictionary<string, object>;
-            //List<Vector3> Verticies = tagData["Verticies"] as List<Vector3>;
-            //ConvertVerticies(Verticies);
+            Dictionary<string, object> tagData = Model.Tag as Dictionary<string, object>;
+            List<Vector3> Verticies = tagData["Verticies"] as List<Vector3>;
+            ConvertVerticies(Verticies);
 
       
           
@@ -144,7 +143,7 @@ namespace StarForce_PendingTitle_
 
 
 
-            CollisionManager.addHeightMap(heightData, 20f, 0);
+            CollisionManager.addHeightMap(heightData, 20f, Vector3.Zero);
     
         }
 

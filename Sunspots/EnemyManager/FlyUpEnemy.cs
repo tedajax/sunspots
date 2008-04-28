@@ -15,6 +15,8 @@ namespace StarForce_PendingTitle_
         //bool moveLeft = false;
         Vector3 CenterPos;
         Matrix Lockon;
+        TimeSpan LifeSpan;
+        float YDeviation;
         public FlyUpEnemy(Model enemymodel, Vector3 position, Vector3 rotation, OBB Trigger, short KeyVal, Random Randomizer)
         {
             EnemyModel = enemymodel;
@@ -27,6 +29,7 @@ namespace StarForce_PendingTitle_
 
             EnemyObj = new Obj3d(EnemyModel, Position, Rotation);
             EnemyObj.setScale(10);
+            Health = 50f;
 
             //Setup a temporary collision box
             colboxes[0] = new OBB(Position, new Vector3(50, 10, 10), Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z));
@@ -38,6 +41,8 @@ namespace StarForce_PendingTitle_
                 //moveLeft = true;
             }
             CenterPos = this.Position;
+            YDeviation = Randomizer.Next(-150, 150);
+            LifeSpan = new TimeSpan(0, 0, 0, 3,500+ Randomizer.Next(0,1000));
            
         }
 
@@ -59,13 +64,31 @@ namespace StarForce_PendingTitle_
 
         public override void Update(GameTime gameTime, MainShip Playership)
         {
-            Vector3 OldPosition = this.Position;
-            base.Update(gameTime, Playership);
-            this.Position = OldPosition;
-            this.Position.Y = MathHelper.Lerp(this.Position.Y, Playership.getSecondaryPosition().Y, .15f);
+            LifeSpan -= gameTime.ElapsedGameTime;
+            if (LifeSpan.TotalSeconds < 0)
+            {
+                Vector3 TargettingPosition = new Vector3(1150, 1200, -1150);
+                TargettingPosition = Vector3.Transform(TargettingPosition, Playership.getNonMovementPositionRotationMatrix());
 
-            Lockon = CreateLockOn(Playership.Position, this.Position);
+                Lockon = CreateLockOn(TargettingPosition, this.Position);
+                this.Position = Vector3.Lerp(this.Position, TargettingPosition, .03f);
+                if (LifeSpan.TotalSeconds < -2)
+                {
+                    KillThis = true;
+                    this.RemoveThis = true;
+                }
 
+            }
+            else
+            {
+
+                Vector3 OldPosition = this.Position;
+                base.Update(gameTime, Playership);
+                this.Position = OldPosition;
+                this.Position.Y = MathHelper.Lerp(this.Position.Y, Playership.getSecondaryPosition().Y + YDeviation, .15f);
+
+                Lockon = CreateLockOn(Playership.Position, this.Position);
+            }
             base.UpdateLocations(gameTime);
         }
 

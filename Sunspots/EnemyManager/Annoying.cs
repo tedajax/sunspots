@@ -53,16 +53,33 @@ namespace StarForce_PendingTitle_
                     TargetPosition.Y = TargetRandom.Next(-30, 30);
                 }
 
-                Vector3 InFront = Vector3.Forward * 50;
+                Vector3 InFront = Vector3.Forward * 350;
                 InFront.X = TargetPosition.X;
                 InFront.Y = TargetPosition.Y;
-                Matrix rot = Matrix.CreateFromQuaternion(PlayerShip.NewRotation);
-                Position = Vector3.Transform(InFront, rot) + PlayerShip.Position;
+                //Matrix rot = Matrix.CreateFromQuaternion(PlayerShip.NewRotation);
+                Position = Vector3.Transform(InFront, PlayerShip.getNonMovementPositionRotationMatrix());
+                Vector3 Offset = PlayerShip.Position - PlayerShip.getSecondaryPosition();
+                Position -= Offset;
 
-                RotationMatrix = rot;
+                RotationMatrix = CreateLockOn(PlayerShip.Position, this.Position);
             }
 
             base.UpdateLocations(gameTime);
+        }
+
+        public Matrix CreateLockOn(Vector3 Target, Vector3 Position)
+        {
+            Matrix NewMatrix;
+            NewMatrix = Matrix.Identity;
+            NewMatrix.Forward = Target - Position;
+            NewMatrix.Forward = Vector3.Normalize(NewMatrix.Forward);
+            NewMatrix.Right = Vector3.Cross(NewMatrix.Forward, Vector3.Up);
+            NewMatrix.Right = Vector3.Normalize(NewMatrix.Right);
+            NewMatrix.Up = Vector3.Cross(NewMatrix.Right, NewMatrix.Forward);
+            NewMatrix.Up = Vector3.Normalize(NewMatrix.Up);
+
+            return NewMatrix;
+
         }
 
         public override void Draw(string technique)

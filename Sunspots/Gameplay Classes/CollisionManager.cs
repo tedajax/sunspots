@@ -18,7 +18,7 @@ namespace StarForce_PendingTitle_
 
         private static float scale=1f;
 
-        private static int heightmapoffset = 0;
+        private static Vector3 heightmapoffset = new Vector3();
 
         //private bool ready = false;
 
@@ -45,7 +45,7 @@ namespace StarForce_PendingTitle_
             Environment.Add(newObj);
         }
 
-        public static void addHeightMap(Quad[,] map, float Scale, int offsetvalue)
+        public static void addHeightMap(Quad[,] map, float Scale, Vector3 offsetvalue)
         {
             heightmap = map;
             scale = Scale;
@@ -55,9 +55,10 @@ namespace StarForce_PendingTitle_
         public bool CheckVertexWithTerrain2(Vector3 VertexToCheck, OBB O)
         {
             Vector3 V = VertexToCheck;
+
             Vector3 transform1 = Vector3.Transform(V, O.WorldTransform);
             Vector3 Deconversion = transform1;
-
+            //transform1 -= heightmapoffset;
             transform1 = Vector3.Transform(transform1, Matrix.Invert(Matrix.CreateScale(20)));
             float realx = (transform1.X);
             float realz = (transform1.Z);
@@ -107,7 +108,6 @@ namespace StarForce_PendingTitle_
                 Vector3 V = VertexToCheck;
                 Vector3 transform1 = Vector3.Transform(V, O.WorldTransform);
                 Vector3 Deconversion = transform1;
-
                 transform1 = Vector3.Transform(transform1, Matrix.Invert(Matrix.CreateScale(20)));
                 int realx = (int)(transform1.X );
                 int realz = (int)(transform1.Z);

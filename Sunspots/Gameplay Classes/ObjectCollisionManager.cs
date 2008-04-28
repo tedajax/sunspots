@@ -50,7 +50,7 @@ namespace StarForce_PendingTitle_
         /// </summary>
         public void CheckObjectCollisions()
         {
-            if (bounds != null)
+            if (bounds != null && Playing.isAllRange)
             {
                 if (!bounds.getCollisionData().checkCollisionSecret(LocalPlayers[0].MainShip.getCollisionData()))
                 {

@@ -26,5 +26,7 @@ namespace StarForce_PendingTitle_
         }
 
         public Vector3[] GetVertices() { return vertices; }
+
+        public void setVerticies(Vector3[] V) { this.vertices = V; }   
     }
 }
