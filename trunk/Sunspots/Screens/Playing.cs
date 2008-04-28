@@ -82,6 +82,7 @@ namespace StarForce_PendingTitle_
         ContentManager Content;
 
         public static bool switchToAllRange;
+        public static bool isAllRange;
 
         public Playing()
         {
@@ -93,6 +94,7 @@ namespace StarForce_PendingTitle_
             VictoryTimer = new TimeSpan(0, 0, 0, 3);
             ShootOldState = 0f;
             switchToAllRange = false;
+            isAllRange = false;
             
         }
 
@@ -181,7 +183,7 @@ namespace StarForce_PendingTitle_
             StartingPosition = WaypointQueue.Dequeue();
 
             //MyPlayer = new AllRangeShip(PlayerModel);
-            MyPlayer = new RailShip(PlayerModel, WaypointQueue);
+            MyPlayer = new RailShip(PlayerModel,WaypointQueue);
             ContentLoaded = "Setting up HUD";
 
             Hud hud = new Hud();
@@ -256,7 +258,8 @@ namespace StarForce_PendingTitle_
                 //EnemyManagement.AddEnemy(new Defensive(EnemyModel, e.Position * 20, e.Rotation, EnemyManager.EnemyId));
                 //EnemyManagement.AddTriggerEnemy(new Defensive(EnemyModel, e.Position * 20, e.Rotation, new OBB(e.Trigger.Position*20f,e.Trigger.Scale*20f), EnemyManager.EnemyId));
                 Vector3 Radians = new Vector3(MathHelper.ToRadians(e.Rotation.X), MathHelper.ToRadians(e.Rotation.Y), MathHelper.ToRadians(e.Rotation.Z));
-                EnemyManagement.AddTriggerEnemy(new FlyUpEnemy(EnemyModel, e.Position*20,Radians, new OBB(e.Trigger.Position*20f, e.Trigger.Scale *20f),EnemyManager.EnemyId, Randomizer));
+                //EnemyManagement.AddTriggerEnemy(new FlyUpEnemy(EnemyModel, e.Position*20,Radians, new OBB(e.Trigger.Position*20f, e.Trigger.Scale *20f),EnemyManager.EnemyId, Randomizer));
+                EnemyManagement.AddEnemy(new Annoying(EnemyModel, e.Position, Radians, new OBB(e.Trigger.Position * 20f, e.Trigger.Scale * 20f), EnemyManager.EnemyId));
                 //EnemyManagement.AddEnemy(new Defensive(, EnemyPositions[x], Vector3.Zero, EnemyManager.EnemyId));
                 //EnemyManagement.GetEnemyList()[x].ENEMY_SPEED = (float)Randomizer.NextDouble() * 10f;
             }
@@ -356,6 +359,7 @@ namespace StarForce_PendingTitle_
             if (switchToAllRange == true)
             {
                 switchToAllRange = false;
+                isAllRange = true;
                 AllRangeShip newShip = AllRangeShip.switchToAllRange((RailShip)Controllers[0].MainShip, PlayerModel);
                 Controllers[0].MainShip = newShip;
             }
@@ -367,7 +371,7 @@ namespace StarForce_PendingTitle_
             }
          
             NetClientClass.Update();
-            //CollisionManager.UpdateCollision();
+            CollisionManager.UpdateCollision();
             ObjColMngr.CheckObjectCollisions();
             ParticleSystem.Update(gameTime);
             EnemyManagement.Update(gameTime, Controllers[0].MainShip);
@@ -467,7 +471,7 @@ namespace StarForce_PendingTitle_
             LaserManagement.Draw("Toon");
             //PlayerMissile.Draw("Toon");
            // DebugManager.drawDebugBox(PlayerMissile.getCollisionData(), PlayerMissile.GetWorldMatrix(), CameraClass.getLookAt());
-            //Bounds.DrawDebug();
+            Bounds.DrawDebug();
             WindowManager.ExplosionSmokeParticles.Draw(gameTime);
             WindowManager.ExplosionParticles.Draw(gameTime);
             WindowManager.SmokeParticles.Draw(gameTime);
