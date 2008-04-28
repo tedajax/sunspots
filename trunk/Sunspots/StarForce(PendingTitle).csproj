@@ -70,6 +70,7 @@
     <Compile Include="3DParticleSystems\SmokePlumeParticleSystem.cs" />
     <Compile Include="Bloomy Toon\BloomComponent.cs" />
     <Compile Include="Bloomy Toon\BloomSettings.cs" />
+    <Compile Include="EnemyManager\Annoying.cs" />
     <Compile Include="EnemyManager\Death.cs" />
     <Compile Include="EnemyManager\Defensive.cs" />
     <Compile Include="EnemyManager\EnemyManager.cs" />
