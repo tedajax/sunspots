@@ -227,7 +227,7 @@ namespace StarForce_PendingTitle_
         }*/
 
         //Returns the advance vector for some ungodly reason
-        private Vector3 AdvanceForward(GameTime gameTime)
+        protected Vector3 AdvanceForward(GameTime gameTime)
         {
             if (TurnRight)
             {
