@@ -58,8 +58,9 @@ namespace StarForce_PendingTitle_
 
             Vector3 transform1 = Vector3.Transform(V, O.WorldTransform);
             Vector3 Deconversion = transform1;
-            //transform1 -= heightmapoffset;
+            transform1 -= heightmapoffset*20f;
             transform1 = Vector3.Transform(transform1, Matrix.Invert(Matrix.CreateScale(20)));
+            
             float realx = (transform1.X);
             float realz = (transform1.Z);
             float realy = transform1.Y;

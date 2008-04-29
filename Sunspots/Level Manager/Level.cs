@@ -143,7 +143,7 @@ namespace StarForce_PendingTitle_
 
 
 
-            CollisionManager.addHeightMap(heightData, 20f, Vector3.Zero);
+            CollisionManager.addHeightMap(heightData, 20f, new Vector3(135,0,2));
     
         }
 

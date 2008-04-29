@@ -180,10 +180,11 @@ namespace StarForce_PendingTitle_
             {
                 WaypointQueue.Enqueue(W.Position*20f);
             }
-            StartingPosition = WaypointQueue.Dequeue();
+            //StartingPosition = WaypointQueue.Dequeue();
 
+            //MyPlayer = new AllRangeShip(PlayerModel);
             MyPlayer = new AllRangeShip(PlayerModel);
-            //MyPlayer = new RailShip(PlayerModel, WaypointQueue);
+            MyPlayer.Position = StartingPosition;
             ContentLoaded = "Setting up HUD";
 
             Hud hud = new Hud();
