@@ -12,9 +12,12 @@ namespace StarForce_PendingTitle_
         Matrix RotationMatrix;
 
         TimeSpan ChangePositionTimer;
-        int TimeChangeSeconds = 5;
+        int TimeChangeSeconds = 1;
 
         Random TargetRandom = new Random();
+
+        Vector3 Offset;
+        Vector3 OldOffset;
 
         public Annoying(Model enemymodel, Vector3 position, Vector3 rotation, OBB Trigger, short KeyVal)
         {
@@ -33,6 +36,9 @@ namespace StarForce_PendingTitle_
             colboxes[0] = new OBB(Position, new Vector3(50, 10, 10), Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z));
             this.Init(colboxes);
             this.setCollisionBoxes(colboxes);
+
+            Offset = Vector3.Zero;
+            OldOffset = Offset;
 
             ChangePositionTimer = new TimeSpan();
         }
@@ -54,15 +60,22 @@ namespace StarForce_PendingTitle_
                 }
 
                 Vector3 InFront = Vector3.Forward * 350;
-                InFront.X = TargetPosition.X;
-                InFront.Y = TargetPosition.Y;
+                //InFront.X = MathHelper.Lerp(InFront.X, TargetPosition.X, 0.1f);
+                //InFront.Y = MathHelper.Lerp(InFront.Y, TargetPosition.Y, 0.1f);
                 //Matrix rot = Matrix.CreateFromQuaternion(PlayerShip.NewRotation);
                 Position = Vector3.Transform(InFront, PlayerShip.getNonMovementPositionRotationMatrix());
-                Vector3 Offset = PlayerShip.Position - PlayerShip.getSecondaryPosition();
-                Position -= Offset;
+                
+                
+                Offset = (PlayerShip.Position - PlayerShip.getSecondaryPosition()) + Offset;
+                //Offset.X = MathHelper.Lerp(Offset.X, TargetPosition.X, 0.1f);
+                //Offset.Y = MathHelper.Lerp(Offset.Y, TargetPosition.Y, 0.1f);
+                Offset.X = MathHelper.Lerp(Offset.X, TargetPosition.X, 0.1f);
+                Position -= Offset * 20;
 
                 RotationMatrix = CreateLockOn(PlayerShip.Position, this.Position);
             }
+
+            OldOffset = Offset;
 
             base.UpdateLocations(gameTime);
         }

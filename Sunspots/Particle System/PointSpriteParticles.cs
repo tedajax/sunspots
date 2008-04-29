@@ -229,7 +229,7 @@ namespace StarForce_PendingTitle_
 
                 float backdistance = m_sprites[i].Data.W;
 
-                angle += 0.3f;
+                angle += 0.9f;
                 if (angle > 360)
                     angle = angle - 360;
 
@@ -256,7 +256,7 @@ namespace StarForce_PendingTitle_
         public virtual void Stream()
         {
             float lerpspeed = 0.1f;
-            float backdistance = 200f;
+            float backdistance = 600f;
 
             for (int i = 0; i < m_sprites.Length; i++)
             {
@@ -265,12 +265,19 @@ namespace StarForce_PendingTitle_
                     if (m_rand.NextDouble() < .2)
                     {
                                                 
+                        /*
                         while (m_sprites[i].Velocity.X > -15 && m_sprites[i].Velocity.X < 15
                                && m_sprites[i].Velocity.Y > -15 && m_sprites[i].Velocity.Y < 15)
                         {
                             m_sprites[i].Velocity.X = m_rand.Next(-30, 30);
                             m_sprites[i].Velocity.Y = m_rand.Next(-30, 30);
                         }
+                        */
+
+                        while (m_sprites[i].Velocity.X == 0)
+                            m_sprites[i].Velocity.X = m_rand.Next(-1, 2);
+
+                        m_sprites[i].Velocity.X *= 30;
 
                         m_sprites[i].Velocity.Z = backdistance;
 
