@@ -87,6 +87,7 @@ namespace StarForce_PendingTitle_
         public Quaternion myRotation;
 
         private float BallRadius;
+        private float JetScale;
 
         public Color particleColor;
         private bool randomColor;
@@ -229,23 +230,23 @@ namespace StarForce_PendingTitle_
 
                 float backdistance = m_sprites[i].Data.W;
 
-                angle += 0.9f;
+                angle += 0.9f * JetScale;
                 if (angle > 360)
                     angle = angle - 360;
 
-                radius += 0.2f;
+                radius += 0.2f * JetScale;
 
                 float sinangle = (float)Math.Sin((double)MathHelper.ToRadians(angle));
                 float cosangle = (float)Math.Cos((double)MathHelper.ToRadians(angle));
 
                 m_sprites[i].Position = new Vector3(sinangle * radius, cosangle * radius, m_sprites[i].Position.Z);
                 
-                m_sprites[i].Position.Z += 2f;
+                m_sprites[i].Position.Z += 2f * JetScale;
 
-                if (m_sprites[i].Position.Z > backdistance)
+                if (m_sprites[i].Position.Z > backdistance * JetScale)
                 {
                     radius = 0;
-                    backdistance = m_rand.Next(20, 40);
+                    backdistance = m_rand.Next(20, 40) * JetScale;
                     m_sprites[i].Position = Vector3.Zero;
                 }
 
@@ -376,8 +377,18 @@ namespace StarForce_PendingTitle_
 
             if (myDevice.RenderState.PointSpriteEnable != true)
                 myDevice.RenderState.PointSpriteEnable = true;
-            if (myDevice.RenderState.PointSize != myPointSize)
-                myDevice.RenderState.PointSize = myPointSize;
+            
+            float TargetPointSize = myPointSize;
+            //if (this.system == ParticleSystemType.Jet) TargetPointSize *= JetScale;
+
+            if (myDevice.RenderState.PointSize != TargetPointSize)
+            {
+                myDevice.RenderState.PointSize = TargetPointSize;
+            }
+            
+          
+                
+            
             if (myDevice.RenderState.AlphaBlendEnable != true)
                 myDevice.RenderState.AlphaBlendEnable = true;
             if (myDevice.RenderState.AlphaBlendOperation != BlendFunction.Add)
@@ -395,7 +406,7 @@ namespace StarForce_PendingTitle_
             if (myDevice.RenderState.ReferenceAlpha != 0)
                 myDevice.RenderState.ReferenceAlpha = 0;
             if (myDevice.RenderState.DepthBufferWriteEnable != false)
-                myDevice.RenderState.DepthBufferWriteEnable = false;
+              myDevice.RenderState.DepthBufferWriteEnable = false;
 
             myDevice.VertexDeclaration = m_vDec;
 
@@ -450,7 +461,8 @@ namespace StarForce_PendingTitle_
 
         public void SetSystemToBall(float rad) { system = ParticleSystemType.Ball; BallRadius = rad; }
         public void SetSystemToExplode() { system = ParticleSystemType.Explosion; }
-        public void SetSystemToJet() { system = ParticleSystemType.Jet; }
+        public void SetSystemToJet() { system = ParticleSystemType.Jet; JetScale = 1; }
+        public void SetSystemToJet(float scl) { system = ParticleSystemType.Jet; JetScale = scl; }
         public void SetSystemToStream() { system = ParticleSystemType.Stream; }
     }
 

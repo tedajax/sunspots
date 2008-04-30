@@ -154,7 +154,7 @@ namespace StarForce_PendingTitle_
             PointSpriteParticles.myScale = Vector3.One * 0.15f;
             PointSpriteParticles.RandomColor = false;
             PointSpriteParticles.particleColor = Color.Salmon;
-            PointSpriteParticles.ParticleSystem = ParticleSystemType.Stream;
+            PointSpriteParticles.SetSystemToStream();
             PointSpriteParticles.RefreshParticles();
 
             JetParts = new PointSpriteParticles(WindowManager.Game,
@@ -168,7 +168,7 @@ namespace StarForce_PendingTitle_
             JetParts.myScale = Vector3.One * 0.15f;
             JetParts.RandomColor = false;
             JetParts.particleColor = Color.CornflowerBlue;
-            JetParts.ParticleSystem = ParticleSystemType.Jet;
+            JetParts.SetSystemToJet();
             JetParts.RefreshParticles();
 
             
