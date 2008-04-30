@@ -81,14 +81,12 @@ namespace StarForce_PendingTitle_
                 RefreshParticles();
             }
         }
-        public ParticleSystemType ParticleSystem
-        {
-            get { return system; }
-            set { system = value; }
-        }
+
         public Vector3 myPosition;
         public Vector3 myScale;
         public Quaternion myRotation;
+
+        private float BallRadius;
 
         public Color particleColor;
         private bool randomColor;
@@ -143,6 +141,8 @@ namespace StarForce_PendingTitle_
 
             textureAsset = texture;
             shaderAsset = shader;
+
+            BallRadius = 2;
         }
 
         public void Rotate(Vector3 axis, float angle)
@@ -304,7 +304,7 @@ namespace StarForce_PendingTitle_
 
         public virtual void Ball()
         {
-            float radius = 2;
+            float radius = BallRadius;
             
             for (int i = 0; i < m_sprites.Length; i++)
             {
@@ -446,7 +446,12 @@ namespace StarForce_PendingTitle_
             if (myDevice.RenderState.DepthBufferWriteEnable != DepthBufferWriteEnable)
                 myDevice.RenderState.DepthBufferWriteEnable = DepthBufferWriteEnable;
 
-        }        
+        }
+
+        public void SetSystemToBall(float rad) { system = ParticleSystemType.Ball; BallRadius = rad; }
+        public void SetSystemToExplode() { system = ParticleSystemType.Explosion; }
+        public void SetSystemToJet() { system = ParticleSystemType.Jet; }
+        public void SetSystemToStream() { system = ParticleSystemType.Stream; }
     }
 
 }

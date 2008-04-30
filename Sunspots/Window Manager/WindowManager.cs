@@ -27,6 +27,8 @@ namespace StarForce_PendingTitle_
 
         ContentManager content;
 
+        static PointSpriteManager psparticles = new PointSpriteManager();
+
         public Vector3 cameraPosition = new Vector3(0.0f, 120.0f, 5f);
         float aspectRatio = Game1.iWidth / Game1.iHeight;
 
@@ -48,8 +50,6 @@ namespace StarForce_PendingTitle_
         public static ParticleSystem3D FireParticles;
              
         public static BoundingFrustum ScreenFrustum;
-
-        public static PointSpriteParticles PointSpriteParticles;
 
         #region exposestuff
 
@@ -96,6 +96,10 @@ namespace StarForce_PendingTitle_
             get { return aspectRatio; }
         }
 
+        public static PointSpriteManager PSParticles
+        {
+            get { return psparticles; }
+        }
 
 #endregion
 
@@ -127,15 +131,6 @@ namespace StarForce_PendingTitle_
             this.Game.Components.Add(SmokeTrailParticles);
             this.Game.Components.Add(SmokeParticles);
             this.Game.Components.Add(FireParticles);
-
-            PointSpriteParticles = new PointSpriteParticles(this.Game,
-                                                            Game1.Graphics,
-                                                            "Content\\Particle",
-                                                            "Content\\Effects\\Particle",
-                                                            100
-                                                           );
-            PointSpriteParticles.myPosition = Vector3.Zero;
-           
         }
 
         protected override void LoadContent()

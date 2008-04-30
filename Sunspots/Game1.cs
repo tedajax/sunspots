@@ -64,10 +64,7 @@ namespace StarForce_PendingTitle_
             SoundFX.SetSoundFilename("Content\\Sound\\test_sunspots_music");
             SoundFX.ResetEngine();
 
-         
-
-
-            graphics.MinimumPixelShaderProfile = ShaderProfile.PS_2_0;
+            //graphics.MinimumPixelShaderProfile = ShaderProfile.PS_2_0;
         }
 
         void Game1_Exiting(object sender, EventArgs e)
