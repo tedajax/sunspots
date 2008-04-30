@@ -122,7 +122,7 @@ namespace StarForce_PendingTitle_
                                             100
                                            );
             Jets.Initialize();
-            Jets.SetSystemToJet();
+            Jets.SetSystemToJet(.03f);
 
             WindowManager.PSParticles.AddParticle(Jets);
         }
@@ -132,10 +132,9 @@ namespace StarForce_PendingTitle_
             Vector3 pos = PlayerShip.getPosition();
             Vector3 rotvec = PlayerShip.getRotation();
             Matrix rot = Matrix.CreateFromYawPitchRoll(rotvec.Y, rotvec.X, rotvec.Z);
-            Vector3 pspos = Vector3.Transform(Vector3.Forward * 40, rot);
-
-            pspos = Vector3.Transform(Vector3.Backward * 10, rot);
-            WindowManager.PSParticles.GetParticleList()[1].myPosition = pspos;
+            
+            Vector3 pspos = Vector3.Transform(Vector3.Backward * .3f, rot);
+            WindowManager.PSParticles.GetParticleList()[1].myPosition = pspos + PlayerShip.getPosition();
             WindowManager.PSParticles.GetParticleList()[1].myRotation = Quaternion.CreateFromRotationMatrix(rot);
         }
 
@@ -146,8 +145,9 @@ namespace StarForce_PendingTitle_
             if (Mode.Equals("Transition")) TransitionModeRun(gameTime);
             if (Mode.Equals("LevelSelect")) LevelSelectRun(gameTime);
             if (Mode.Equals("Die")) Die();
-
+            
             WindowManager.PSParticles.Update(gameTime);
+
             skySphere.Update(gameTime);
             CameraClass.Update();
         }
@@ -413,7 +413,7 @@ namespace StarForce_PendingTitle_
                     p.Draw("NormalDepth");
                 }
                 Mothership.DisplayModel(CameraClass.getLookAt(), "NormalDepth", Vector3.Zero);
-                //Particles.Draw2(gameTime, WindowManager.GraphicsDevice);
+                Particles.Draw2(gameTime, WindowManager.GraphicsDevice);
                 device.SetRenderTarget(0, sceneRenderTarget);
                 device.Clear(Color.Black);
 
@@ -424,11 +424,11 @@ namespace StarForce_PendingTitle_
                     p.Draw("Toon");
                 }
                 Mothership.DisplayModel(CameraClass.getLookAt(), "Toon", Vector3.Zero);
-                //Particles.Draw2(gameTime, WindowManager.GraphicsDevice);
+                Particles.Draw2(gameTime, WindowManager.GraphicsDevice);
                 
                 device.SetRenderTarget(0, null);
                 device.Clear(Color.Black);
-                //ApplyPostprocess();
+                ApplyPostprocess();
 
                 WindowManager.PSParticles.GetParticleList()[0].Draw(gameTime);
                 Bloom.calleddrawalready = false;
@@ -456,7 +456,8 @@ namespace StarForce_PendingTitle_
                 Planets[0].Draw("NormalDepth");
                 Mothership.DisplayModel(CameraClass.getLookAt(), "NormalDepth", Vector3.Zero);
                 PlayerShip.DisplayModel(CameraClass.getLookAt(), "NormalDepth", Vector3.Zero);
-                if (LaunchShip) WindowManager.PSParticles.GetParticleList()[1].Draw(gameTime);
+                //if (LaunchShip)
+                    WindowManager.PSParticles.GetParticleList()[1].Draw(gameTime);
                 device.SetRenderTarget(0, sceneRenderTarget);
                 device.Clear(Color.Black);
 
@@ -465,10 +466,11 @@ namespace StarForce_PendingTitle_
                 Planets[0].Draw("Toon");
                 Mothership.DisplayModel(CameraClass.getLookAt(), "Toon", Vector3.Zero);
                 PlayerShip.DisplayModel(CameraClass.getLookAt(), "Toon", Vector3.Zero);
-                if (LaunchShip) WindowManager.PSParticles.GetParticleList()[1].Draw(gameTime);
+                //if (LaunchShip)
+                    WindowManager.PSParticles.GetParticleList()[1].Draw(gameTime);
                 device.SetRenderTarget(0, null);
                 device.Clear(Color.Black);
-                //ApplyPostprocess();
+                ApplyPostprocess();
                 Bloom.calleddrawalready = false;
                 Bloom.Draw(gameTime);
 
