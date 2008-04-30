@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\x86\debug\</OutputPath>
+    <OutputPath>..\..\Build\Bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -118,6 +118,7 @@
     <Compile Include="ParticleSystem.cs" />
     <Compile Include="ParticleVertex.cs" />
     <Compile Include="Screens\BackGroundScreen.cs" />
+    <Compile Include="Screens\Level1.cs" />
     <Compile Include="Screens\LevelSelect.cs" />
     <Compile Include="Screens\MainMenu.cs" />
     <Compile Include="Screens\ProfileMenu.cs" />

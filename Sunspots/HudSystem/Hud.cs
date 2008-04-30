@@ -124,10 +124,10 @@ namespace StarForce_PendingTitle_
                 ComboOpacity += ComboOpacityIncrease;
                 ComboOpacity = MathHelper.Min(255, ComboOpacity);
             }
-            if (Playing.MissionComplete)
-            {
-                ScorePosition.Y = MathHelper.Lerp(ScorePosition.Y, 320, .1f);
-            }
+            //if (Playing.MissionComplete)
+            //{
+             //   ScorePosition.Y = MathHelper.Lerp(ScorePosition.Y, 320, .1f);
+            //}
 
         }
 

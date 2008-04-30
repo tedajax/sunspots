@@ -4,22 +4,25 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Lidgren.Library.Network;
 using Lidgren.Library.Network.Xna;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace StarForce_PendingTitle_
 {
     public class LaserManager
     {
-        private List<Laser> LaserList;
+        private static List<Laser> LaserList;
         private Dictionary<Int16, Laser> LasersFromOnline; //this Dictionary is just there so we can handle lasers recived online seperatly
-        private int LaserCount;
-        private Queue<Laser> LasersOnQueue; //this queue is all the lasers that were created on local machine
+        private static int LaserCount;
+        private static Queue<Laser> LasersOnQueue; //this queue is all the lasers that were created on local machine
         public static Queue<Laser> LasersDestroyed; //this queue is all the lasers that were destroyed on the local machine
         public static Queue<NetMessage> MessagesRecieved; //this queue contains messages sent from online
         public static Int16 IdValue = -32768; //this ID value allows us to assign each laser and ID, so that when sent online they are unique
 
         private TimeSpan OnlineWaitTime = new TimeSpan(0, 0, 0, 0, 150);
         private TimeSpan TimeWaited = new TimeSpan(0, 0, 0, 0, 150);
-        public LaserManager()
+
+        public static Model LaserModel;
+        public LaserManager(Model LaserMod)
         {
             LaserList = new List<Laser>();
             LasersOnQueue = new Queue<Laser>();
@@ -27,9 +30,10 @@ namespace StarForce_PendingTitle_
             LasersFromOnline = new Dictionary<short, Laser>();
             LasersDestroyed = new Queue<Laser>();
             LaserCount = 0;
+            LaserModel = LaserMod;
         }
 
-        public void AddLaser(Laser newlaser)
+        public static void AddLaser(Laser newlaser)
         {
             LaserList.Add(newlaser);
             IdValue++; //Increment the ID Value
@@ -62,7 +66,7 @@ namespace StarForce_PendingTitle_
                         Vector3 Rotation = XnaSerialization.ReadVector3(newlaser);
                         Matrix Matrix = XnaSerialization.ReadMatrix(newlaser);
                         float damage = newlaser.ReadFloat();
-                        Laser createlaser = new Laser(Position, Rotation, Matrix, damage, Laser.Source.Player, Playing.LaserModel, Id);
+                        Laser createlaser = new Laser(Position, Rotation, Matrix, damage, Laser.Source.Player, LaserModel, Id);
                         this.AddLaserFromOnline(createlaser);
                     }
                 }

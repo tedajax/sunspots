@@ -137,11 +137,11 @@ namespace StarForce_PendingTitle_
             }
 
             
-            if (Continue.isMouseOver(new Vector2(Mouse.GetState().X, Mouse.GetState().Y)) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+           /* if (Continue.isMouseOver(new Vector2(Mouse.GetState().X, Mouse.GetState().Y)) && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 WindowManager.AddScreen(new Playing());
                 WindowManager.removeScreen(this);
-            }
+            }*/
 
             Oldstate = newstate;
             // WindowManager.OldState = WindowManager.NewState;

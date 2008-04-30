@@ -570,9 +570,9 @@ namespace StarForce_PendingTitle_
                 Vector3 newrotation = new Vector3();
                 newrotation.Y -= MathHelper.Pi;
 
-                Laser newlaser = new Laser(this.Position, newrotation, Matrix.CreateFromQuaternion(this.NewRotation), 20f, Laser.Source.Player, Playing.LaserModel, LaserManager.IdValue);
+                Laser newlaser = new Laser(this.Position, newrotation, Matrix.CreateFromQuaternion(this.NewRotation), 20f, Laser.Source.Player, LaserManager.LaserModel, LaserManager.IdValue);
 
-                Playing.LaserManagement.AddLaser(newlaser);
+                LaserManager.AddLaser(newlaser);
 
                 TimeToNextShot = new TimeSpan(0, 0, 0, 0, 100);
             }
@@ -580,13 +580,13 @@ namespace StarForce_PendingTitle_
 
         public void FireMissle()
         {
-            Playing.PlayerMissile.FireMissle(this.Position, Vector3.Zero, Matrix.CreateFromQuaternion(this.NewRotation));
+            //Playing.PlayerMissile.FireMissle(this.Position, Vector3.Zero, Matrix.CreateFromQuaternion(this.NewRotation));
         }
 
         public void FireMissle(Vector3 target)
         {
-            Playing.PlayerMissile.FireMissle(this.Position, Vector3.Zero, Matrix.CreateFromQuaternion(this.NewRotation));
-            Playing.PlayerMissile.TargetVector = target;
+            //Playing.PlayerMissile.FireMissle(this.Position, Vector3.Zero, Matrix.CreateFromQuaternion(this.NewRotation));
+            //Playing.PlayerMissile.TargetVector = target;
         }
 
         public void CancelLaser()

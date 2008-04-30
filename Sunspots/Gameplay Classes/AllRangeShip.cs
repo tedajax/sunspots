@@ -71,7 +71,7 @@ namespace StarForce_PendingTitle_
         public AllRangeShip(Model pmodel)
         {
             shipCenterPosition = Vector3.Zero;
-            this.position = StarForce_PendingTitle_.Playing.StartingPosition;
+            this.position = StarForce_PendingTitle_.Level1.StartingPosition;
             velocity = Vector3.Zero;
             Randomizer = new Random();
             Mode = "Playing";
@@ -104,7 +104,7 @@ namespace StarForce_PendingTitle_
         public void Init()
         {
             shipCenterPosition = Vector3.Zero;
-            this.position = StarForce_PendingTitle_.Playing.StartingPosition;
+            this.position = StarForce_PendingTitle_.Level1.StartingPosition;
             velocity = Vector3.Zero;
             Randomizer = new Random();
             Mode = "Spawning";
@@ -619,7 +619,7 @@ namespace StarForce_PendingTitle_
                 SetDeath();
             }
             //and another one to see if mission was completed
-            if (StarForce_PendingTitle_.Playing.MissionComplete && Mode != "Victory")
+            if (StarForce_PendingTitle_.Level1.MissionComplete && Mode != "Victory")
             {
                 SetVictory();
             }
