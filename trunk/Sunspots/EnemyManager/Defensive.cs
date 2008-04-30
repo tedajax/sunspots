@@ -63,6 +63,8 @@ namespace StarForce_PendingTitle_
         {
             base.Update(gameTime, PlayerShip);
 
+            advance = AdvanceForward(gameTime);
+
             if (!KillThis)
             {
                 //Reposition the awareness sphere 
