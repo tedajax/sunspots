@@ -111,6 +111,7 @@
     <Compile Include="Misc Classes\TextboxManager.cs" />
     <Compile Include="Missile\Missile.cs" />
     <Compile Include="NetClientClass.cs" />
+    <Compile Include="Particle System\PointSpriteManager.cs" />
     <Compile Include="Particle System\PointSpriteParticles.cs" />
     <Compile Include="ParticleEmitter.cs" />
     <Compile Include="ParticleSettings.cs" />
