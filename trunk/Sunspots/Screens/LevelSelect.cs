@@ -333,8 +333,8 @@ namespace StarForce_PendingTitle_
             }
             if (Opacity >= 255)
             {
-
-              WindowManager.AddScreen(new Playing(), WindowManager.FindLastScreenPosition() - 1);
+                WindowManager.Game.Components.Remove(Bloom); 
+              WindowManager.AddScreen(new Level1(PlayerShip.GetModel()), WindowManager.FindLastScreenPosition() - 1);
               SelectPressed = true;
               WindowManager.removeScreen(this);
             }
@@ -381,9 +381,9 @@ namespace StarForce_PendingTitle_
 
         private void Die()
         {
-            WindowManager.Game.Components.Remove(Bloom);
+            /*WindowManager.Game.Components.Remove(Bloom);
             WindowManager.removeScreen(this);
-            WindowManager.AddScreen(new Playing(), 0);
+            WindowManager.AddScreen(new Playing(), 0);*/
         }
 
         public override void Draw(GameTime gameTime)

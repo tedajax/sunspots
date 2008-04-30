@@ -85,7 +85,7 @@ namespace StarForce_PendingTitle_
             
 
             Init(pmodel, 0, false, null);
-            this.ShipCenterPosition = Playing.StartingPosition;
+            this.ShipCenterPosition = Level1.StartingPosition;
             this.TargetPosition = Waypoints.Dequeue();
             TargettingMatrix =  CreateLockOn(this.TargetPosition, this.shipCenterPosition);
 
@@ -305,7 +305,7 @@ namespace StarForce_PendingTitle_
                 }
                 else
                 {
-                    Playing.switchToAllRange = true;
+                   // Playing.switchToAllRange = true;
                 }
             }
             TargettingMatrix = Matrix.Lerp(TargettingMatrix, this.CreateLockOn(TargetPosition, this.shipCenterPosition), 0.1f);
@@ -363,9 +363,15 @@ namespace StarForce_PendingTitle_
                 Vector3 newrotation = new Vector3();
                 newrotation.Y -= MathHelper.Pi;
 
-                Laser newlaser = new Laser(this.Position, newrotation,  this.getDrawYawPitchRoll()*TargettingMatrix, 20f, Laser.Source.Player, Playing.LaserModel, LaserManager.IdValue);
+                //Laser newlaser = new Laser(this.Position, newrotation,  this.getDrawYawPitchRoll()*TargettingMatrix, 20f, Laser.Source.Player, LaserManager.LaserModel, LaserManager.IdValue);
+                Vector3 newVec = new Vector3(0,0,-350);
+                newVec = Vector3.Transform(newVec, this.getNonMovementPositionRotationMatrix());
 
-                Playing.LaserManagement.AddLaser(newlaser);
+                Matrix TargettingMatrix = CreateLockOn(newVec, this.Position);
+
+                Laser newlaser = new Laser(this.position, newrotation, TargettingMatrix, 20f, Laser.Source.Player, LaserManager.LaserModel, LaserManager.IdValue);
+
+                LaserManager.AddLaser(newlaser);
 
                 TimeToNextShot = new TimeSpan(0, 0, 0, 0, 100);
             }
@@ -410,7 +416,7 @@ namespace StarForce_PendingTitle_
         public override void Draw2D(SpriteBatch batch, SpriteFont font)
         {
             base.Draw2D(batch, font);
-            batch.DrawString(font, offsetPosition.ToString(), Vector2.Zero, Color.Wheat);
+            //batch.DrawString(font, offsetPosition.ToString(), Vector2.Zero, Color.Wheat);
         }
 
 

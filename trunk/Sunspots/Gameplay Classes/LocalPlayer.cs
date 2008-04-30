@@ -207,13 +207,13 @@ namespace StarForce_PendingTitle_
 
            
             //-----------------------------------END CONTROLS--------------------------------\\
-            if (Playing.MissionComplete)
+            /*if (Playing.MissionComplete)
             {
                 this.ComboStarted = false;
                 this.score += ComboValue * ComboMultiplier;
                 ComboValue = 0;
                 ComboMultiplier = 0;
-            }
+            }*/
             if (this.ComboStarted)
             {
                 this.ComboTimeSpan -= gameTime.ElapsedGameTime;
@@ -280,6 +280,7 @@ namespace StarForce_PendingTitle_
 
         public override void DrawText(SpriteFont font, SpriteBatch batch)
         {
+            
             hud.Draw(batch,font);
             mainShip.Draw2D(batch, font);
         }

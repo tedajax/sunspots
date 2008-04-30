@@ -42,7 +42,7 @@ namespace StarForce_PendingTitle_
             foreach (LevelData.Generic3DObject G in LevelData.LevelObjects)
             {
                 Model NewModel = Content.Load<Model>("Content\\"+G.ContentName);
-                Playing.ChangeEffectUsedByModel(NewModel, newEffect);
+                Level1.ChangeEffectUsedByModel(NewModel, newEffect);
                 StaticObjects[count] = new Obj3d(NewModel);
                 StaticObjects[count].setPosition(G.Position*20f);
                 StaticObjects[count].setRotation(G.Rotation);
@@ -51,11 +51,11 @@ namespace StarForce_PendingTitle_
             }
 
             
-            Model Model = Content.Load<Model>("Content\\LevelObjects\\demolevel2");
+            /*Model Model = Content.Load<Model>("Content\\LevelObjects\\demolevel2");
            
             Dictionary<string, object> tagData = Model.Tag as Dictionary<string, object>;
             List<Vector3> Verticies = tagData["Verticies"] as List<Vector3>;
-            ConvertVerticies(Verticies);
+            ConvertVerticies(Verticies);*/
 
       
           
