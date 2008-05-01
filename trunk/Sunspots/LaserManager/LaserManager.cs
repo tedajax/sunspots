@@ -21,6 +21,7 @@ namespace StarForce_PendingTitle_
         private TimeSpan OnlineWaitTime = new TimeSpan(0, 0, 0, 0, 150);
         private TimeSpan TimeWaited = new TimeSpan(0, 0, 0, 0, 150);
 
+
         public static Model LaserModel;
         public LaserManager(Model LaserMod)
         {

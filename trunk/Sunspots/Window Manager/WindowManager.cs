@@ -27,8 +27,8 @@ namespace StarForce_PendingTitle_
 
         ContentManager content;
 
-        static PointSpriteManager psparticles = new PointSpriteManager();
-
+        static PointSpriteManager psparticles;
+        
         public Vector3 cameraPosition = new Vector3(0.0f, 120.0f, 5f);
         float aspectRatio = Game1.iWidth / Game1.iHeight;
 
@@ -63,6 +63,8 @@ namespace StarForce_PendingTitle_
         {
             get { return base.Game; }
         }
+
+        public Game getGame() { return base.Game; }
 
         public BoundingFrustum ScreenViewFrustum
         {
@@ -138,7 +140,8 @@ namespace StarForce_PendingTitle_
             
             spriteBatch = new SpriteBatch(GraphicsDevice);
             gameFont = content.Load<SpriteFont>("Content\\SpriteFont1");
-            
+
+            psparticles = new PointSpriteManager(Game);
 
             foreach (GameWindow window in windows)
             {
