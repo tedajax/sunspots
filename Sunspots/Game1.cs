@@ -65,6 +65,8 @@ namespace StarForce_PendingTitle_
             SoundFX.ResetEngine();
 
             //graphics.MinimumPixelShaderProfile = ShaderProfile.PS_2_0;
+
+            
         }
 
         void Game1_Exiting(object sender, EventArgs e)
@@ -106,7 +108,11 @@ namespace StarForce_PendingTitle_
             Components.Add(windowManager);
           
             base.Initialize();
+        }
 
+        public Game Game
+        {
+            get { return this; }
         }
 
        

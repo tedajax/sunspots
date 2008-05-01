@@ -25,6 +25,8 @@ namespace StarForce_PendingTitle_
 
         private Obj3d LaserObj;
 
+        PointSpriteParticles LaserParticles;
+
         protected TimeSpan laserlife;
 
         OBB[] OBBs = new OBB[1];
@@ -72,7 +74,10 @@ namespace StarForce_PendingTitle_
         public Source LaserSource
         {
             get { return source; }
-            internal set { source = value; }
+            internal set 
+            { 
+                source = value;
+            }
         }
 
         public float LaserSpeed
@@ -105,6 +110,38 @@ namespace StarForce_PendingTitle_
 
             OBBs[0] = new OBB(this.position, new Vector3(5, 5, 10)*LaserObj.getScale());
             this.Init(OBBs);
+
+            InitParticles();
+        }
+
+        private void InitParticles()
+        {
+            LaserParticles = new PointSpriteParticles(Game1.Graphics,
+                                                      "Content\\Particle",
+                                                      "Content\\Effects\\Particle",
+                                                      50
+                                                     );
+            LaserParticles.Initialize();
+            LaserParticles.SetSystemToBall(2);
+            LaserParticles.RandomColor = false;
+
+            switch (LaserSource)
+            {
+                case Source.Enemy:
+                    LaserParticles.particleColor = Color.Salmon;
+                    break;
+                case Source.Player:
+                    LaserParticles.particleColor = Color.CornflowerBlue;
+                    break;
+                case Source.Turret:
+                    LaserParticles.particleColor = Color.YellowGreen;
+                    break;
+                case Source.UnKnown:
+                    LaserParticles.RandomColor = true;
+                    break;
+            }
+
+            LaserParticles.VaryColor = true;
         }
 
         public void Update(GameTime gameTime)
@@ -120,12 +157,16 @@ namespace StarForce_PendingTitle_
 
             LaserObj.setPosition(Position);
 
+            LaserParticles.myPosition = Position;
+
             LaserObj.setRotation(Vector3.Transform(AdvanceVector, movementTransformMatrix));
 
             OBBs[0] = new OBB(this.position, new Vector3(5, 5, 10));
             this.setCollisionBoxes(OBBs);
 
             LaserLife -= gameTime.ElapsedGameTime;
+
+            LaserParticles.Update(gameTime);
 
             if (LaserLife.TotalMilliseconds <= 0) KillThis = true;
         }
@@ -134,7 +175,8 @@ namespace StarForce_PendingTitle_
         {
             Matrix OldMatrix = movementTransformMatrix;
             movementTransformMatrix *= Matrix.CreateRotationY(MathHelper.Pi);
-            LaserObj.DisplayModel(CameraClass.getLookAt(), technique, movementTransformMatrix);
+            LaserParticles.Draw();
+            //LaserObj.DisplayModel(CameraClass.getLookAt(), technique, movementTransformMatrix);
             movementTransformMatrix = OldMatrix;
         }
 

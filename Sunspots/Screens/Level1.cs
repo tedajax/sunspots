@@ -143,8 +143,7 @@ namespace StarForce_PendingTitle_
             
             ContentLoaded = "Setting up Particle System";
             ParticleSystem.LoadGraphicsContent(WindowManager.GraphicsDevice, Content);
-            PointSpriteParticles = new PointSpriteParticles(WindowManager.Game,
-                                                            Game1.Graphics,
+            PointSpriteParticles = new PointSpriteParticles(Game1.Graphics,
                                                             "Content\\Particle",
                                                             "Content\\Effects\\Particle",
                                                             200
@@ -157,8 +156,7 @@ namespace StarForce_PendingTitle_
             PointSpriteParticles.SetSystemToStream();
             PointSpriteParticles.RefreshParticles();
 
-            JetParts = new PointSpriteParticles(WindowManager.Game,
-                                                Game1.Graphics,
+            JetParts = new PointSpriteParticles(Game1.Graphics,
                                                 "Content\\Particle",
                                                 "Content\\Effects\\Particle",
                                                 50

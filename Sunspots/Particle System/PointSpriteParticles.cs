@@ -91,6 +91,7 @@ namespace StarForce_PendingTitle_
 
         public Color particleColor;
         private bool randomColor;
+        private bool varyColor;
 
         private bool show = true;
 
@@ -110,6 +111,16 @@ namespace StarForce_PendingTitle_
             }
         }
 
+        public bool VaryColor
+        {
+            get { return varyColor; }
+            set
+            {
+                varyColor = value;
+                RefreshParticles();
+            }
+        }
+
         private Random m_rand;
         float myPointSize = 20f;
 
@@ -123,9 +134,9 @@ namespace StarForce_PendingTitle_
         GraphicsDeviceManager myDeviceManager;
         GraphicsDevice myDevice;
 
-        public PointSpriteParticles(Game game, GraphicsDeviceManager graphiceDeviceManager, string texture, string shader,int particleCount)
+        public PointSpriteParticles(GraphicsDeviceManager graphiceDeviceManager, string texture, string shader,int particleCount)
         {
-            content = new ContentManager(game.Services);
+            content = new ContentManager(PointSpriteManager.Game.Services);
             myDeviceManager = graphiceDeviceManager;
             
             myPosition = Vector3.Zero;
@@ -198,7 +209,46 @@ namespace StarForce_PendingTitle_
                 if (randomColor)
                     m_sprites[i].Color = new Color(new Vector4((float)m_rand.NextDouble(), (float)m_rand.NextDouble(), (float)m_rand.NextDouble(), 1f));
                 else
-                    m_sprites[i].Color = particleColor;
+                {
+                    if (varyColor)
+                    {
+                        //Find highest color value
+                        int r = m_sprites[i].Color.R;
+                        int g = m_sprites[i].Color.G;
+                        int b = m_sprites[i].Color.B;
+                        int a = m_sprites[i].Color.A;
+
+                        if (r > g && r > b)
+                        {
+                            r = r + m_rand.Next(-20, 20);
+                            g = g + m_rand.Next(-10, 10);
+                            b = g + m_rand.Next(-10, 10);
+                        }
+                        else if (g > r && g > b)
+                        {
+                            r = r + m_rand.Next(-10, 10);
+                            g = g + m_rand.Next(-20, 20);
+                            b = g + m_rand.Next(-10, 10);
+                        }
+                        else if (b > r && b > g)
+                        {
+                            r = r + m_rand.Next(-10, 10);
+                            g = g + m_rand.Next(-10, 10);
+                            b = g + m_rand.Next(-20, 20);
+                        }
+                        else
+                        {
+                            r = r + m_rand.Next(-10, 10);
+                            g = g + m_rand.Next(-10, 10);
+                            b = g + m_rand.Next(-10, 10);
+                        }
+
+                        m_sprites[i].Color = new Color((byte)r, (byte)g, (byte)b, (byte)a);
+                    }
+                    else
+                        m_sprites[i].Color = particleColor;
+                }
+                 
             }
         }
 
@@ -407,6 +457,104 @@ namespace StarForce_PendingTitle_
                 myDevice.RenderState.ReferenceAlpha = 0;
             if (myDevice.RenderState.DepthBufferWriteEnable != false)
               myDevice.RenderState.DepthBufferWriteEnable = false;
+
+            myDevice.VertexDeclaration = m_vDec;
+
+            Matrix wvp = Matrix.CreateScale(5) * (Matrix.CreateScale(myScale) * Matrix.CreateFromQuaternion(myRotation) * Matrix.CreateTranslation(myPosition)) * CameraClass.getLookAt() * CameraClass.getPerspective();
+            effect.Parameters["WorldViewProj"].SetValue(wvp);
+
+            if (show)
+            {
+                effect.Begin();
+                for (int ps = 0; ps < effect.CurrentTechnique.Passes.Count; ps++)
+                {
+                    effect.CurrentTechnique.Passes[ps].Begin();
+
+                    if (m_sprites.Length >= 15000)
+                    {
+                        myDevice.DrawUserPrimitives<VertexParticle>(PrimitiveType.PointList, m_sprites, 0, m_sprites.Length / 3);
+                        myDevice.DrawUserPrimitives<VertexParticle>(PrimitiveType.PointList, m_sprites, m_sprites.Length / 3, m_sprites.Length / 3);
+                        myDevice.DrawUserPrimitives<VertexParticle>(PrimitiveType.PointList, m_sprites, 2 * m_sprites.Length / 3, m_sprites.Length / 3);
+                    }
+                    else
+                        myDevice.DrawUserPrimitives<VertexParticle>(PrimitiveType.PointList, m_sprites, 0, m_sprites.Length);
+
+                    effect.CurrentTechnique.Passes[ps].End();
+                }
+                effect.End();
+            }
+
+            if (myDevice.RenderState.PointSpriteEnable != PointSpriteEnable)
+                myDevice.RenderState.PointSpriteEnable = PointSpriteEnable;
+            if (myDevice.RenderState.PointSize != PointSize)
+                myDevice.RenderState.PointSize = PointSize;
+            if (myDevice.RenderState.AlphaBlendEnable != AlphaBlendEnable)
+                myDevice.RenderState.AlphaBlendEnable = AlphaBlendEnable;
+            if (myDevice.RenderState.AlphaBlendOperation != AlphaBlendOperation)
+                myDevice.RenderState.AlphaBlendOperation = AlphaBlendOperation;
+            if (myDevice.RenderState.SourceBlend != SourceBlend)
+                myDevice.RenderState.SourceBlend = SourceBlend;
+            if (myDevice.RenderState.DestinationBlend != DestinationBlend)
+                myDevice.RenderState.DestinationBlend = DestinationBlend;
+            if (myDevice.RenderState.SeparateAlphaBlendEnabled != SeparateAlphaBlendEnabled)
+                myDevice.RenderState.SeparateAlphaBlendEnabled = SeparateAlphaBlendEnabled;
+            if (myDevice.RenderState.AlphaTestEnable != AlphaTestEnable)
+                myDevice.RenderState.AlphaTestEnable = AlphaTestEnable;
+            if (myDevice.RenderState.AlphaFunction != AlphaFunction)
+                myDevice.RenderState.AlphaFunction = AlphaFunction;
+            if (myDevice.RenderState.ReferenceAlpha != ReferenceAlpha)
+                myDevice.RenderState.ReferenceAlpha = ReferenceAlpha;
+            if (myDevice.RenderState.DepthBufferWriteEnable != DepthBufferWriteEnable)
+                myDevice.RenderState.DepthBufferWriteEnable = DepthBufferWriteEnable;
+
+        }
+
+        public void Draw()
+        {
+            bool PointSpriteEnable = myDevice.RenderState.PointSpriteEnable;
+            float PointSize = myDevice.RenderState.PointSize;
+            bool AlphaBlendEnable = myDevice.RenderState.AlphaBlendEnable;
+            BlendFunction AlphaBlendOperation = myDevice.RenderState.AlphaBlendOperation;
+            Blend SourceBlend = myDevice.RenderState.SourceBlend;
+            Blend DestinationBlend = myDevice.RenderState.DestinationBlend;
+            bool SeparateAlphaBlendEnabled = myDevice.RenderState.SeparateAlphaBlendEnabled;
+            bool AlphaTestEnable = myDevice.RenderState.AlphaTestEnable;
+            CompareFunction AlphaFunction = myDevice.RenderState.AlphaFunction;
+            int ReferenceAlpha = myDevice.RenderState.ReferenceAlpha;
+            bool DepthBufferWriteEnable = myDevice.RenderState.DepthBufferWriteEnable;
+
+            if (myDevice.RenderState.PointSpriteEnable != true)
+                myDevice.RenderState.PointSpriteEnable = true;
+
+            float TargetPointSize = myPointSize;
+            //if (this.system == ParticleSystemType.Jet) TargetPointSize *= JetScale;
+
+            if (myDevice.RenderState.PointSize != TargetPointSize)
+            {
+                myDevice.RenderState.PointSize = TargetPointSize;
+            }
+
+
+
+
+            if (myDevice.RenderState.AlphaBlendEnable != true)
+                myDevice.RenderState.AlphaBlendEnable = true;
+            if (myDevice.RenderState.AlphaBlendOperation != BlendFunction.Add)
+                myDevice.RenderState.AlphaBlendOperation = BlendFunction.Add;
+            if (myDevice.RenderState.SourceBlend != Blend.SourceAlpha)
+                myDevice.RenderState.SourceBlend = Blend.SourceAlpha;
+            if (myDevice.RenderState.DestinationBlend != Blend.One)
+                myDevice.RenderState.DestinationBlend = Blend.One;
+            if (myDevice.RenderState.SeparateAlphaBlendEnabled != false)
+                myDevice.RenderState.SeparateAlphaBlendEnabled = false;
+            if (myDevice.RenderState.AlphaTestEnable != true)
+                myDevice.RenderState.AlphaTestEnable = true;
+            if (myDevice.RenderState.AlphaFunction != CompareFunction.Greater)
+                myDevice.RenderState.AlphaFunction = CompareFunction.Greater;
+            if (myDevice.RenderState.ReferenceAlpha != 0)
+                myDevice.RenderState.ReferenceAlpha = 0;
+            if (myDevice.RenderState.DepthBufferWriteEnable != false)
+                myDevice.RenderState.DepthBufferWriteEnable = false;
 
             myDevice.VertexDeclaration = m_vDec;
 

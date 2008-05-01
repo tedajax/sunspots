@@ -22,8 +22,18 @@ namespace StarForce_PendingTitle_
             get { return particleEffect; }
         }
 
-        public PointSpriteManager()
+
+        private static Game game;
+
+        public static Game Game
         {
+            get { return game; }
+            set { game = value; }
+        }
+
+        public PointSpriteManager(Game g)
+        {
+            game = g;
             ParticleList = new List<PointSpriteParticles>();
         }
 

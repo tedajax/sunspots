@@ -102,8 +102,7 @@ namespace StarForce_PendingTitle_
 
             Black = WindowManager.Content.Load<Texture2D>("Content\\Dark");
 
-            PSParts = new PointSpriteParticles(WindowManager.Game,
-                                               Game1.Graphics,
+            PSParts = new PointSpriteParticles(Game1.Graphics,
                                                "Content\\Particle",
                                                "Content\\Effects\\Particle",
                                                100
@@ -115,8 +114,7 @@ namespace StarForce_PendingTitle_
             PSParts.RefreshParticles();
             WindowManager.PSParticles.AddParticle(PSParts);
 
-            Jets = new PointSpriteParticles(WindowManager.Game,
-                                            Game1.Graphics,
+            Jets = new PointSpriteParticles(Game1.Graphics,
                                             "Content\\Particle",
                                             "Content\\Effects\\Particle",
                                             100
