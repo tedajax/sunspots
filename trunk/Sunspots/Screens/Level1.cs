@@ -50,6 +50,7 @@ namespace StarForce_PendingTitle_
         Model PlayerModel;
 
         ObjectCollisionManager ObjColMngr = new ObjectCollisionManager();
+        CollisionManager CollisionManager = new CollisionManager();
 
         public Level1(Model PlayerModel)
         {
@@ -127,8 +128,8 @@ namespace StarForce_PendingTitle_
             {
                 WaypointQueue.Enqueue(W.Position * 20f);
             }
-            //StartingPosition = WaypointQueue.Dequeue();
-            MyPlayer = new RailShip(PlayerModel, WaypointQueue);
+            StartingPosition = WaypointQueue.Dequeue();
+            MyPlayer = new AllRangeShip(PlayerModel);
             ContentLoaded = "Setting up HUD";
             Hud hud = new Hud();
             hud.LoadContent(Content);
@@ -184,6 +185,7 @@ namespace StarForce_PendingTitle_
 
             //ObjColMngr.EnemyMngr = EnemyManagement;
             ObjColMngr.LaserMngr = LaserManagement;
+            CollisionManager.setPlayer(LocalPlayer.MainShip);
           
 
             ContentLoaded = "Done";
@@ -249,6 +251,7 @@ namespace StarForce_PendingTitle_
             ParticleSystem.Update(gameTime);
             PointSpriteUpdate(gameTime);
             ObjColMngr.LaserMngr.Update(gameTime);
+            CollisionManager.UpdateCollision();
         }
 
         private void PointSpriteUpdate(GameTime gameTime)
@@ -285,7 +288,7 @@ namespace StarForce_PendingTitle_
             GraphicsDevice device = WindowManager.GraphicsDevice;
 
             device.SetRenderTarget(0, normalDepthRenderTarget);
-                skySphere.Draw(gameTime, CameraClass.getLookAt());
+                //skySphere.Draw(gameTime, CameraClass.getLookAt());
                 LevelPieces.drawObjects(device, CameraClass.getLookAt(), "NormalDepth");
                 LevelPieces.drawWater(WindowManager.GraphicsDevice, CameraClass.getLookAt(), "NormalDepth");
                 LocalPlayer.DebugDraw(CameraClass.getLookAt(), gameFont, WindowManager.SpriteBatch, "NormalDepth");
@@ -318,6 +321,11 @@ namespace StarForce_PendingTitle_
             ApplyPostprocess();
             bloom.calleddrawalready = false;
             bloom.Draw(gameTime);
+
+            WindowManager.SpriteBatch.Begin();
+                LocalPlayer.DrawText(gameFont, WindowManager.SpriteBatch);
+                WindowManager.SpriteBatch.DrawString(gameFont, CollisionManager.crazybool.ToString(), Vector2.Zero, Color.White);
+            WindowManager.SpriteBatch.End();
         }
 
         void ApplyPostprocess()

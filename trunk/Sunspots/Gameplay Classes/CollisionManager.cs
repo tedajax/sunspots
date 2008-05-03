@@ -14,11 +14,11 @@ namespace StarForce_PendingTitle_
 
         private static List<CollisionObject> Environment;
 
-        private static Quad[,] heightmap=null;
+        private static List<Quad[,]> heightmap= new List<Quad[,]>();
+        //private static Quad[,] heightmap = null;
+        private static float scale=20f;
 
-        private static float scale=1f;
-
-        private static Vector3 heightmapoffset = new Vector3();
+        private static List<Vector3> heightmapoffset = new List<Vector3>();
 
         //private bool ready = false;
 
@@ -47,18 +47,17 @@ namespace StarForce_PendingTitle_
 
         public static void addHeightMap(Quad[,] map, float Scale, Vector3 offsetvalue)
         {
-            heightmap = map;
-            scale = Scale;
-            heightmapoffset = offsetvalue;
+            heightmap.Add(map);
+            heightmapoffset.Add(offsetvalue);
         }
 
-        public bool CheckVertexWithTerrain2(Vector3 VertexToCheck, OBB O)
+        public bool CheckVertexWithTerrain2(Vector3 VertexToCheck, OBB O, int QuadNumber)
         {
             Vector3 V = VertexToCheck;
 
             Vector3 transform1 = Vector3.Transform(V, O.WorldTransform);
             Vector3 Deconversion = transform1;
-            transform1 -= heightmapoffset*20f;
+            transform1 -= heightmapoffset[QuadNumber];
             transform1 = Vector3.Transform(transform1, Matrix.Invert(Matrix.CreateScale(20)));
             
             float realx = (transform1.X);
@@ -84,7 +83,7 @@ namespace StarForce_PendingTitle_
 
             if (realx >= 0 && realz >= 0 && (int)realx <= 62 && (int)realz <= 62)
             {
-                Vector3[] Verticies = heightmap[(int)realx, (int)realz].GetVertices();
+                Vector3[] Verticies = heightmap[QuadNumber][(int)realx, (int)realz].GetVertices();
                 float XNormalized = (transform1.X % 8);
                 XNormalized = (transform1.X % 8) / 8;
                 float ZNormalized = ((-1*transform1.Z) % 8) / 8;
@@ -104,7 +103,7 @@ namespace StarForce_PendingTitle_
             return false;
         }
 
-        public bool CheckVertexWithTerrain(Vector3 VertexToCheck, OBB O)
+      /*  public bool CheckVertexWithTerrain(Vector3 VertexToCheck, OBB O)
         {
                 Vector3 V = VertexToCheck;
                 Vector3 transform1 = Vector3.Transform(V, O.WorldTransform);
@@ -184,9 +183,9 @@ namespace StarForce_PendingTitle_
                     }
                 }
             return false;
-        }
+        }*/
 
-        public void CheckBoundingBoxWithTerrain(CollisionData CollisionData)
+        public void CheckBoundingBoxWithTerrain(CollisionData CollisionData, int QuadNumber)
         {
             OBB[] CollisionObjects = CollisionData.getCollisionBoxes();
             for (int c =0; c< CollisionObjects.Length; c++)
@@ -213,10 +212,11 @@ namespace StarForce_PendingTitle_
                 for (int i = 0; i < Position.Length; i++)
                 {
 
-                    if (CheckVertexWithTerrain2(Position[i],BoundingBox))
+                    if (CheckVertexWithTerrain2(Position[i],BoundingBox,QuadNumber))
                     {
                         //We found some collision. Update 1) Set vertex inside the OBB 2)Tell CollisionData that collision occured
                         BoundingBox.CollisionVerts[i] = true;
+                        crazybool = "Collision";
                         CollisionData.foundCollision(c);
                     }
                 }
@@ -225,13 +225,27 @@ namespace StarForce_PendingTitle_
            
 
         }
-
+        public string crazybool = "None";
         public void UpdateCollision()
         {
-
+            crazybool = "None";
             CollisionData PlayerObj = player.getCollisionData();
-    
-            CheckBoundingBoxWithTerrain(PlayerObj);
+            for (int i = 0; i < heightmap.Count; i++)
+            {
+                Quad[,] Quad = heightmap[i];
+                Vector3 OffsetValue = heightmapoffset[i];
+                if (OffsetValue.X < player.Position.X && OffsetValue.X + (500 * 20) > player.Position.X)
+                {
+                    if (OffsetValue.Z > player.Position.Z && OffsetValue.Z - (500 * 20) < player.Position.Z)
+                    {
+                        crazybool = "Checking " + i.ToString();
+                        CheckBoundingBoxWithTerrain(PlayerObj, i);
+                       
+                    }
+                }
+                
+            }
+            
         }
     }
 }

@@ -42,6 +42,9 @@ namespace StarForce_PendingTitle_
             foreach (LevelData.Generic3DObject G in LevelData.LevelObjects)
             {
                 Model NewModel = Content.Load<Model>("Content\\"+G.ContentName);
+                Dictionary<string, object> tagData = NewModel.Tag as Dictionary<string, object>;
+                List<Vector3> Verticies = tagData["Verticies"] as List<Vector3>;
+                ConvertVerticies(Verticies, G.Position*20f);
                 Level1.ChangeEffectUsedByModel(NewModel, newEffect);
                 StaticObjects[count] = new Obj3d(NewModel);
                 StaticObjects[count].setPosition(G.Position*20f);
@@ -55,7 +58,7 @@ namespace StarForce_PendingTitle_
            
             Dictionary<string, object> tagData = Model.Tag as Dictionary<string, object>;
             List<Vector3> Verticies = tagData["Verticies"] as List<Vector3>;
-            ConvertVerticies(Verticies);*/
+            */
 
       
           
@@ -68,7 +71,7 @@ namespace StarForce_PendingTitle_
             
         }
 
-        void ConvertVerticies(List<Vector3> vertices)
+        void ConvertVerticies(List<Vector3> vertices, Vector3 Offset)
         {
 
             int MaxX=-1000;
@@ -143,7 +146,7 @@ namespace StarForce_PendingTitle_
 
 
 
-            CollisionManager.addHeightMap(heightData, 20f, new Vector3(135,0,2));
+            CollisionManager.addHeightMap(heightData, 20f, Offset);
     
         }
 
