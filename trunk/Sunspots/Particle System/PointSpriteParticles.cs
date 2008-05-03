@@ -133,7 +133,7 @@ namespace StarForce_PendingTitle_
         ContentManager content;
         GraphicsDeviceManager myDeviceManager;
         GraphicsDevice myDevice;
-
+        
         public PointSpriteParticles(GraphicsDeviceManager graphiceDeviceManager, string texture, string shader,int particleCount)
         {
             content = new ContentManager(PointSpriteManager.Game.Services);
@@ -218,29 +218,32 @@ namespace StarForce_PendingTitle_
                         int b = m_sprites[i].Color.B;
                         int a = m_sprites[i].Color.A;
 
+                        int lowval = 2;
+                        int highval = 4;
+
                         if (r > g && r > b)
                         {
-                            r = r + m_rand.Next(-20, 20);
-                            g = g + m_rand.Next(-10, 10);
-                            b = g + m_rand.Next(-10, 10);
+                            r = r + m_rand.Next(-highval, highval);
+                            g = g + m_rand.Next(-lowval, lowval);
+                            b = g + m_rand.Next(-lowval, lowval);
                         }
                         else if (g > r && g > b)
                         {
-                            r = r + m_rand.Next(-10, 10);
-                            g = g + m_rand.Next(-20, 20);
-                            b = g + m_rand.Next(-10, 10);
+                            r = r + m_rand.Next(-lowval, lowval);
+                            g = g + m_rand.Next(-highval, highval);
+                            b = g + m_rand.Next(-lowval, lowval);
                         }
                         else if (b > r && b > g)
                         {
-                            r = r + m_rand.Next(-10, 10);
-                            g = g + m_rand.Next(-10, 10);
-                            b = g + m_rand.Next(-20, 20);
+                            r = r + m_rand.Next(-lowval, lowval);
+                            g = g + m_rand.Next(-lowval, lowval);
+                            b = g + m_rand.Next(-highval, highval);
                         }
                         else
                         {
-                            r = r + m_rand.Next(-10, 10);
-                            g = g + m_rand.Next(-10, 10);
-                            b = g + m_rand.Next(-10, 10);
+                            r = r + m_rand.Next(-lowval, lowval);
+                            g = g + m_rand.Next(-lowval, lowval);
+                            b = g + m_rand.Next(-lowval, lowval);
                         }
 
                         m_sprites[i].Color = new Color((byte)r, (byte)g, (byte)b, (byte)a);

@@ -119,10 +119,10 @@ namespace StarForce_PendingTitle_
             LaserParticles = new PointSpriteParticles(Game1.Graphics,
                                                       "Content\\Particle",
                                                       "Content\\Effects\\Particle",
-                                                      50
+                                                      25
                                                      );
             LaserParticles.Initialize();
-            LaserParticles.SetSystemToBall(2);
+            LaserParticles.SetSystemToBall(1);
             LaserParticles.RandomColor = false;
 
             switch (LaserSource)
