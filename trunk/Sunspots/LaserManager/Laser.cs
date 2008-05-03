@@ -140,7 +140,7 @@ namespace StarForce_PendingTitle_
                     LaserParticles.RandomColor = true;
                     break;
             }
-
+            
             LaserParticles.VaryColor = true;
         }
 
