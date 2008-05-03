@@ -115,8 +115,7 @@ namespace StarForce_PendingTitle_
             m_rand = new Random();
 
             createParticle(new Vector3(), new Vector3());
-            createParticle(new Vector3(), new Vector3());
-            createParticle(new Vector3(), new Vector3());           
+                    
 
         }
 
@@ -184,34 +183,20 @@ namespace StarForce_PendingTitle_
 
         public static void addThrusterSprite3(MainShip ship, MyControls controls)
         {
-            while (Sprites.Count < 2)
+            while (Sprites.Count < 1)
             {
                 createParticle(new Vector3(), new Vector3());
             }
             
+           
             SpriteVertex newsprite = Sprites[0];
-            newsprite.Position = new Vector3(500, -500, 500);
-            //newsprite.Position = new Vector3((float)200 / 1000f,(1500/2) / 1000f, 8.8f);
-            //newsprite.Position = Vector3.Transform(newsprite.Position, ship.getNonMovementPositionRotationMatrix() );
-            //newsprite.Velocity = new Vector3();
-            //newsprite.Velocity = Vector3.Transform(newsprite.Velocity, Matrix.CreateFromQuaternion(ship.NewRotation)*ship.getDrawYawPitchRoll());
-            newsprite.Acceleration = new Vector3();
-            newsprite.Color = Color.Blue;
-            size = particlesize;
-            if (ship.isBoosting()) size += 1 * particlesize/3;
-            Sprites[0] = newsprite;
-            //Sprites.Add(newsprite);
-
-
-
-             newsprite = Sprites[1];
             newsprite.Position = new Vector3 (0,0,-350);
             newsprite.Position = Vector3.Transform(newsprite.Position, ship.getNonMovementPositionRotationMatrix());
             //newsprite.Velocity = new Vector3();
             //newsprite.Velocity = Vector3.Transform(newsprite.Velocity, Matrix.CreateFromQuaternion(ship.NewRotation)*ship.getDrawYawPitchRoll());
             newsprite.Acceleration = new Vector3();
             newsprite.Color = Color.Blue;
-            Sprites[1] = newsprite;
+            Sprites[0] = newsprite;
 
             if (controls.getMissle() == 1)
             {
@@ -360,6 +345,9 @@ namespace StarForce_PendingTitle_
             m_effect.Parameters["WorldViewProj"].SetValue(Matrix.Identity* ViewMatrix * CameraClass.getPerspective());
             m_effect.Parameters["SpriteTexture"].SetValue(Sprite1);
             m_effect.Parameters["Rotation"].SetValue(Matrix.Identity);
+            graphics.RenderState.PointSize = (float)50;
+            m_effect.Parameters["WorldViewProj"].SetValue(Matrix.Identity* ViewMatrix * CameraClass.getPerspective());
+            m_effect.Parameters["SpriteTexture"].SetValue(ReticuleUseTexture);
             m_effect.Begin();
             foreach (EffectPass pass in m_effect.CurrentTechnique.Passes)
             {
@@ -368,21 +356,6 @@ namespace StarForce_PendingTitle_
                 {
                     SpriteVertex[] m_sprites = Sprites.ToArray();
                     graphics.DrawUserPrimitives<SpriteVertex>(PrimitiveType.PointList, m_sprites, 0, 1);
-                }
-                pass.End();
-            }
-            m_effect.End();
-            graphics.RenderState.PointSize = (float)50;
-            m_effect.Parameters["WorldViewProj"].SetValue(Matrix.Identity* ViewMatrix * CameraClass.getPerspective());
-            m_effect.Parameters["SpriteTexture"].SetValue(ReticuleUseTexture);
-            m_effect.Begin();
-            foreach (EffectPass pass in m_effect.CurrentTechnique.Passes)
-            {
-                pass.Begin();
-                if (Sprites.Count > 1)
-                {
-                    SpriteVertex[] m_sprites = Sprites.ToArray();
-                    graphics.DrawUserPrimitives<SpriteVertex>(PrimitiveType.PointList, m_sprites, 1, 1);
                 }
                 pass.End();
             }
