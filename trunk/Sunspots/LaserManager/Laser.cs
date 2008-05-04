@@ -106,7 +106,7 @@ namespace StarForce_PendingTitle_
             LaserObj = new Obj3d(lasermodel);
             LaserObj.setScale(5);
 
-            laserlife = new TimeSpan(0, 0, 3);
+            laserlife = new TimeSpan(0, 0, 1);
 
             OBBs[0] = new OBB(this.position, new Vector3(5, 5, 10)*LaserObj.getScale());
             this.Init(OBBs);
@@ -119,10 +119,10 @@ namespace StarForce_PendingTitle_
             LaserParticles = new PointSpriteParticles(Game1.Graphics,
                                                       "Content\\Particle",
                                                       "Content\\Effects\\Particle",
-                                                      25
+                                                      2
                                                      );
             LaserParticles.Initialize();
-            LaserParticles.SetSystemToBall(1);
+            LaserParticles.SetSystemToBall(0.5f);
             LaserParticles.RandomColor = false;
 
             switch (LaserSource)
@@ -140,8 +140,10 @@ namespace StarForce_PendingTitle_
                     LaserParticles.RandomColor = true;
                     break;
             }
+
+            LaserParticles.RefreshParticles();
             
-            LaserParticles.VaryColor = true;
+            //LaserParticles.VaryColor = true;
         }
 
         public void Update(GameTime gameTime)
